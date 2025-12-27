@@ -12,36 +12,33 @@ import com.hyperion.template.MyGdxGame;
  */
 public class ScreenManager {
 
-    // private singleton instance that only this class operates on directly
-    private static final ScreenManager INSTANCE = new ScreenManager();
+    private static MyGdxGame game;
+    private static ShapeRenderer shapeRenderer;
 
-    private MyGdxGame game;
-    private ShapeRenderer shapeRenderer;
+    private static float transitionDuration = 0.8f;
+    private static boolean fadingIn = false;
+    private static boolean fadingOut = false;
+    private static float transitionOverlayAlpha = 1;
 
-    private float transitionDuration = 0.8f;
-    private boolean fadingIn = false;
-    private boolean fadingOut = false;
-    private float transitionOverlayAlpha = 1;
-
-    private GameScreen nextScreen = null;
+    private static GameScreen nextScreen = null;
 
     private ScreenManager() {
     }
 
     public static void create(MyGdxGame game) {
-        INSTANCE.game = game;
+        ScreenManager.game = game;
 
-        INSTANCE.shapeRenderer = new ShapeRenderer();
-        INSTANCE.shapeRenderer.setColor(Color.BLACK);
+        shapeRenderer = new ShapeRenderer();
+        shapeRenderer.setColor(Color.BLACK);
     }
 
     public static void pushScreen(GameScreen screen) {
-        INSTANCE.transitionTo(screen, 0.8f);
+        transitionTo(screen, 0.8f);
     }
 
-    private void transitionTo(GameScreen screen, float transitionDuration) {
+    private static void transitionTo(GameScreen screen, float transitionDuration) {
 
-        this.transitionDuration = transitionDuration;
+        ScreenManager.transitionDuration = transitionDuration;
 
         // update projection matrix in case window has been resized
         shapeRenderer.getProjectionMatrix()
@@ -71,15 +68,15 @@ public class ScreenManager {
 
     public static void render() {
 
-        if (!INSTANCE.fadingIn && !INSTANCE.fadingOut) {
+        if (!fadingIn && !fadingOut) {
             return;
         }
 
-        INSTANCE.update();
-        INSTANCE.renderOverlay();
+        update();
+        renderOverlay();
     }
 
-    private void update() {
+    private static void update() {
         if (fadingIn) {
             transitionOverlayAlpha -= Gdx.graphics.getDeltaTime() / (transitionDuration / 2);
 
@@ -107,7 +104,7 @@ public class ScreenManager {
         }
     }
 
-    private void renderOverlay() {
+    private static void renderOverlay() {
         Gdx.gl.glEnable(GL20.GL_BLEND);
 
         shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
@@ -119,7 +116,7 @@ public class ScreenManager {
     }
 
     public static void dispose() {
-        INSTANCE.shapeRenderer.dispose();
+        shapeRenderer.dispose();
     }
 
 }

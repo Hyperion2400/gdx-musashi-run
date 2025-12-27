@@ -10,15 +10,17 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 
 import java.util.List;
 
+/**
+ * Wraps AssetManager and loads assets.
+ */
 public class MyAssetManager {
 
-    // private singleton instance that only this class operates on directly
-    private static final AssetManager INSTANCE = new AssetManager();
+    private static final AssetManager assetManager = new AssetManager();
 
     private static final String FONT_PATH = "ui/patrick_hand_64.fnt";
 
     private static final List<String> textureFiles = List.of(
-        "main_menu_background.png"
+        "menu_background.png"
     );
 
     private MyAssetManager() {
@@ -30,6 +32,7 @@ public class MyAssetManager {
         loadFonts();
 
         INSTANCE.finishLoading();
+        assetManager.finishLoading();
     }
 
     private static void loadTextures() {
@@ -37,7 +40,7 @@ public class MyAssetManager {
         var textureParams = new TextureLoader.TextureParameter();
         textureParams.minFilter = Texture.TextureFilter.Linear;
         textureParams.magFilter = Texture.TextureFilter.Linear;
-        textureFiles.forEach(path -> INSTANCE.load(
+        textureFiles.forEach(path -> assetManager.load(
             "texture/" + path,
             Texture.class,
             textureParams
@@ -47,9 +50,9 @@ public class MyAssetManager {
     private static void loadFonts() {
         // set the loaders for the generator and the fonts themselves
         FileHandleResolver resolver = new InternalFileHandleResolver();
-        INSTANCE.setLoader(BitmapFont.class, ".fnt", new BitmapFontLoader(resolver));
+        assetManager.setLoader(BitmapFont.class, ".fnt", new BitmapFontLoader(resolver));
 
-        INSTANCE.load(FONT_PATH, BitmapFont.class, fontParams());
+        assetManager.load(FONT_PATH, BitmapFont.class, fontParams());
     }
 
     private static BitmapFontLoader.BitmapFontParameter fontParams() {
@@ -58,15 +61,16 @@ public class MyAssetManager {
         return parameter;
     }
 
-    public static Texture getTexture(String fileName) {
-        return INSTANCE.get(fileName, Texture.class);
+    public static Texture getTexture(String path) {
+        return assetManager.get(path, Texture.class);
     }
 
     public static BitmapFont getFont() {
-        return INSTANCE.get(FONT_PATH, BitmapFont.class);
+        return assetManager.get(FONT_PATH, BitmapFont.class);
     }
 
     public static void dispose() {
-        INSTANCE.dispose();
+        assetManager.dispose();
     }
+
 }
