@@ -21,12 +21,12 @@ public class MainMenuScreen implements GameScreen {
 
     public MainMenuScreen() {
 
-        stage = new Stage(new FitViewport(1280, 720, new OrthographicCamera()));
+        stage = new Stage(new FitViewport(MyGdxGame.WIDTH, MyGdxGame.HEIGHT, new OrthographicCamera()));
 
-        Image backgroundImg = new Image(MyAssetManager.getTexture("texture/main_menu_background.png"));
+        Image backgroundImg = new Image(MyAssetManager.getTexture("texture/menu_background.png"));
 
-        backgroundImg.setWidth(1280);
-        backgroundImg.setHeight(720);
+        backgroundImg.setWidth(MyGdxGame.WIDTH);
+        backgroundImg.setHeight(MyGdxGame.HEIGHT);
         stage.addActor(backgroundImg);
 
         Label.LabelStyle smallLabelStyle = new Label.LabelStyle();

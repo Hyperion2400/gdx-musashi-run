@@ -14,8 +14,8 @@ public class TeaVMLauncher {
         //config.width = 640;
         //config.height = 480;
         //// If width and height are both 0, then the app will use all available space.
-        config.width = 1280;
-        config.height = 720;
+        config.width = MyGdxGame.WIDTH;
+        config.height = MyGdxGame.HEIGHT;
         new TeaApplication(new MyGdxGame(), config);
     }
 }

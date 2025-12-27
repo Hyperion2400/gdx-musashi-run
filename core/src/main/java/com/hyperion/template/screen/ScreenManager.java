@@ -12,7 +12,7 @@ import com.hyperion.template.MyGdxGame;
  */
 public class ScreenManager {
 
-    // private singleton instance that only this class operates on
+    // private singleton instance that only this class operates on directly
     private static final ScreenManager INSTANCE = new ScreenManager();
 
     private MyGdxGame game;

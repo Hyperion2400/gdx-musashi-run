@@ -12,8 +12,11 @@ import com.hyperion.template.screen.menu.MainMenuScreen;
  */
 public class MyGdxGame extends Game {
 
-    public final static String VERSION = "v0.0.1";
-    public final static String TITLE = "MyGdxGame";
+    public static final String VERSION = "v0.0.1";
+    public static final String TITLE = "MyGdxGame";
+
+    public static final short WIDTH = 1280;
+    public static final short HEIGHT = 720;
 
     @Override
     public void create() {

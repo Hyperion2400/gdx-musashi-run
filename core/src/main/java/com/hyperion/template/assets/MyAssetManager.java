@@ -12,8 +12,10 @@ import java.util.List;
 
 public class MyAssetManager {
 
-    // private singleton instance that only this class operates on
+    // private singleton instance that only this class operates on directly
     private static final AssetManager INSTANCE = new AssetManager();
+
+    private static final String FONT_PATH = "ui/patrick_hand_64.fnt";
 
     private static final List<String> textureFiles = List.of(
         "main_menu_background.png"
@@ -47,7 +49,7 @@ public class MyAssetManager {
         FileHandleResolver resolver = new InternalFileHandleResolver();
         INSTANCE.setLoader(BitmapFont.class, ".fnt", new BitmapFontLoader(resolver));
 
-        INSTANCE.load("ui/patrick_hand_64.fnt", BitmapFont.class, fontParams());
+        INSTANCE.load(FONT_PATH, BitmapFont.class, fontParams());
     }
 
     private static BitmapFontLoader.BitmapFontParameter fontParams() {
@@ -61,7 +63,7 @@ public class MyAssetManager {
     }
 
     public static BitmapFont getFont() {
-        return INSTANCE.get("ui/patrick_hand_64.fnt", BitmapFont.class);
+        return INSTANCE.get(FONT_PATH, BitmapFont.class);
     }
 
     public static void dispose() {
