@@ -2,7 +2,7 @@ package com.hyperion.template.teavm;
 
 import com.github.xpenatan.gdx.backends.teavm.TeaApplicationConfiguration;
 import com.github.xpenatan.gdx.backends.teavm.TeaApplication;
-import com.hyperion.template.GdxGameTemplate;
+import com.hyperion.template.MyGdxGame;
 
 /**
  * Launches the TeaVM/HTML application.
@@ -16,6 +16,6 @@ public class TeaVMLauncher {
         //// If width and height are both 0, then the app will use all available space.
         config.width = 1280;
         config.height = 720;
-        new TeaApplication(new GdxGameTemplate(), config);
+        new TeaApplication(new MyGdxGame(), config);
     }
 }
