@@ -6,6 +6,7 @@ import com.badlogic.gdx.utils.ScreenUtils;
 import com.hyperion.template.assets.MyAssetManager;
 import com.hyperion.template.screen.ScreenManager;
 import com.hyperion.template.screen.menu.MainMenuScreen;
+import com.hyperion.template.state.SettingsManager;
 
 /**
  * {@link com.badlogic.gdx.ApplicationListener} implementation shared by all platforms.
@@ -21,6 +22,7 @@ public class MyGdxGame extends Game {
     @Override
     public void create() {
 
+        SettingsManager.create();
         ScreenManager.create(this);
 
         MyAssetManager.loadAssets();
