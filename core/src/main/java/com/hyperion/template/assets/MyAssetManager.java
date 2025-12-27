@@ -12,8 +12,8 @@ import java.util.List;
 
 public class MyAssetManager {
 
-    // singleton instance
-    public static final AssetManager INSTANCE = new AssetManager();
+    // private singleton instance that only this class operates on
+    private static final AssetManager INSTANCE = new AssetManager();
 
     private static final List<String> textureFiles = List.of(
         "main_menu_background.png"
@@ -24,6 +24,13 @@ public class MyAssetManager {
 
     public static void loadAssets() {
 
+        loadTextures();
+        loadFonts();
+
+        INSTANCE.finishLoading();
+    }
+
+    private static void loadTextures() {
         // TEXTURES
         var textureParams = new TextureLoader.TextureParameter();
         textureParams.minFilter = Texture.TextureFilter.Linear;
@@ -33,8 +40,6 @@ public class MyAssetManager {
             Texture.class,
             textureParams
         ));
-
-        loadFonts();
     }
 
     private static void loadFonts() {
@@ -51,4 +56,15 @@ public class MyAssetManager {
         return parameter;
     }
 
+    public static Texture getTexture(String fileName) {
+        return INSTANCE.get(fileName, Texture.class);
+    }
+
+    public static BitmapFont getFont() {
+        return INSTANCE.get("ui/patrick_hand_64.fnt", BitmapFont.class);
+    }
+
+    public static void dispose() {
+        INSTANCE.dispose();
+    }
 }

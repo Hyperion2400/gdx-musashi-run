@@ -18,12 +18,11 @@ public class MyGdxGame extends Game {
     @Override
     public void create() {
 
-        ScreenManager.INSTANCE.create();
+        ScreenManager.create(this);
 
         MyAssetManager.loadAssets();
-        MyAssetManager.INSTANCE.finishLoading();
 
-        ScreenManager.INSTANCE.transitionTo((new MainMenuScreen()));
+        ScreenManager.pushScreen((new MainMenuScreen()));
     }
 
     @Override
@@ -32,14 +31,14 @@ public class MyGdxGame extends Game {
         ScreenUtils.clear(Color.BLACK);
 
         super.render();
-        ScreenManager.INSTANCE.render();
+        ScreenManager.render();
     }
 
     @Override
     public void dispose() {
         super.dispose();
-        MyAssetManager.INSTANCE.dispose();
-        ScreenManager.INSTANCE.dispose();
+        MyAssetManager.dispose();
+        ScreenManager.dispose();
     }
 
 }

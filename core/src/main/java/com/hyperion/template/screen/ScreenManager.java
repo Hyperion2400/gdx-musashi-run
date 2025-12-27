@@ -12,7 +12,8 @@ import com.hyperion.template.MyGdxGame;
  */
 public class ScreenManager {
 
-    public static final ScreenManager INSTANCE = new ScreenManager();
+    // private singleton instance that only this class operates on
+    private static final ScreenManager INSTANCE = new ScreenManager();
 
     private MyGdxGame game;
     private ShapeRenderer shapeRenderer;
@@ -27,18 +28,19 @@ public class ScreenManager {
     private ScreenManager() {
     }
 
-    public void create() {
-        game = (MyGdxGame) Gdx.app.getApplicationListener();
+    public static void create(MyGdxGame game) {
+        INSTANCE.game = game;
 
-        shapeRenderer = new ShapeRenderer();
-        shapeRenderer.setColor(Color.BLACK);
+        INSTANCE.shapeRenderer = new ShapeRenderer();
+        INSTANCE.shapeRenderer.setColor(Color.BLACK);
     }
 
-    public void transitionTo(GameScreen screen) {
-        transitionTo(screen, 0.8f);
+    public static void pushScreen(GameScreen screen) {
+        INSTANCE.transitionTo(screen, 0.8f);
     }
 
-    public void transitionTo(GameScreen screen, float transitionDuration) {
+    private void transitionTo(GameScreen screen, float transitionDuration) {
+
         this.transitionDuration = transitionDuration;
 
         // update projection matrix in case window has been resized
@@ -67,14 +69,14 @@ public class ScreenManager {
     }
 
 
-    public void render() {
+    public static void render() {
 
-        if (!fadingIn && !fadingOut) {
+        if (!INSTANCE.fadingIn && !INSTANCE.fadingOut) {
             return;
         }
 
-        update();
-        renderOverlay();
+        INSTANCE.update();
+        INSTANCE.renderOverlay();
     }
 
     private void update() {
@@ -116,8 +118,8 @@ public class ScreenManager {
         Gdx.gl.glDisable(GL20.GL_BLEND);
     }
 
-    public void dispose() {
-        shapeRenderer.dispose();
+    public static void dispose() {
+        INSTANCE.shapeRenderer.dispose();
     }
 
 }

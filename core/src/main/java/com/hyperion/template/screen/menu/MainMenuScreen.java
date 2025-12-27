@@ -2,8 +2,6 @@ package com.hyperion.template.screen.menu;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
@@ -11,10 +9,10 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.hyperion.template.MyGdxGame;
+import com.hyperion.template.assets.MyAssetManager;
 import com.hyperion.template.screen.GameScreen;
 import com.hyperion.template.screen.ScreenManager;
 import com.hyperion.template.screen.game.GameLevelScreen;
-import com.hyperion.template.assets.MyAssetManager;
 import com.hyperion.template.ui.UiFactory;
 
 public class MainMenuScreen implements GameScreen {
@@ -25,19 +23,14 @@ public class MainMenuScreen implements GameScreen {
 
         stage = new Stage(new FitViewport(1280, 720, new OrthographicCamera()));
 
-        Image backgroundImg = new Image(MyAssetManager.INSTANCE.get(
-            "texture/main_menu_background.png",
-            Texture.class
-        ));
+        Image backgroundImg = new Image(MyAssetManager.getTexture("texture/main_menu_background.png"));
+
         backgroundImg.setWidth(1280);
         backgroundImg.setHeight(720);
         stage.addActor(backgroundImg);
 
         Label.LabelStyle smallLabelStyle = new Label.LabelStyle();
-        smallLabelStyle.font = MyAssetManager.INSTANCE.get(
-            "ui/patrick_hand_64.fnt",
-            BitmapFont.class
-        );
+        smallLabelStyle.font = MyAssetManager.getFont();
 
         Label versionLabel = new Label(MyGdxGame.VERSION, smallLabelStyle);
         versionLabel.setPosition(8, 0);
@@ -47,23 +40,17 @@ public class MainMenuScreen implements GameScreen {
         stage.addActor(versionLabel);
 
         TextButton.TextButtonStyle largeButtonStyle = new TextButton.TextButtonStyle();
-        largeButtonStyle.font = MyAssetManager.INSTANCE.get(
-            "ui/patrick_hand_64.fnt",
-            BitmapFont.class
-        );
+        largeButtonStyle.font = MyAssetManager.getFont();
 
         TextButton startButton = UiFactory.textButton(
             "Start",
             largeButtonStyle,
             1,
-            () -> ScreenManager.INSTANCE.transitionTo(new GameLevelScreen())
+            () -> ScreenManager.pushScreen(new GameLevelScreen())
         );
 
         TextButton.TextButtonStyle smallButtonStyle = new TextButton.TextButtonStyle();
-        smallButtonStyle.font = MyAssetManager.INSTANCE.get(
-            "ui/patrick_hand_64.fnt",
-            BitmapFont.class
-        );
+        smallButtonStyle.font = MyAssetManager.getFont();
 
         TextButton creditsButton = UiFactory.textButton(
             "Credits",
