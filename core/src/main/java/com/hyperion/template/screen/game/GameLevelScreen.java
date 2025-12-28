@@ -3,10 +3,16 @@ package com.hyperion.template.screen.game;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.hyperion.template.screen.GameScreen;
+import com.hyperion.template.sound.SoundManager;
 
 public class GameLevelScreen implements GameScreen {
 
     public GameLevelScreen() {
+    }
+
+    @Override
+    public void show() {
+        SoundManager.playMusic(getMusicPath());
     }
 
     @Override
@@ -24,6 +30,11 @@ public class GameLevelScreen implements GameScreen {
 
     @Override
     public void setInputProcessor() {
+    }
+
+    @Override
+    public String getMusicPath() {
+        return null;
     }
 
 }

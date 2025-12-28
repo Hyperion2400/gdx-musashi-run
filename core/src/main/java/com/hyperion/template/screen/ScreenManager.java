@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.hyperion.template.MyGdxGame;
+import com.hyperion.template.sound.SoundManager;
 
 /**
  * Renders and transitions screens.
@@ -91,7 +92,14 @@ public class ScreenManager {
         } else if (fadingOut) {
             transitionOverlayAlpha += Gdx.graphics.getDeltaTime() / (transitionDuration / 2);
 
-            if (transitionOverlayAlpha >= 1) {
+
+            if (transitionOverlayAlpha < 1) {
+                // if next screen has a music path and it differs from current, fade out music as well
+                if (nextScreen.getMusicPath() != null
+                    && !nextScreen.getMusicPath().equals(SoundManager.getCurrentMusicPath())) {
+                    SoundManager.setVolume(1 - transitionOverlayAlpha);
+                }
+            } else {
                 fadingIn = true;
                 fadingOut = false;
                 transitionOverlayAlpha = 1;

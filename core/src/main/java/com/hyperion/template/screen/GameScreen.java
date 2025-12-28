@@ -27,4 +27,8 @@ public interface GameScreen extends Screen {
     default void hide() {
     }
 
+    default String getMusicPath() {
+        return null;
+    }
+
 }

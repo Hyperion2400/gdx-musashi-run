@@ -13,6 +13,7 @@ import com.hyperion.template.assets.MyAssetManager;
 import com.hyperion.template.screen.GameScreen;
 import com.hyperion.template.screen.ScreenManager;
 import com.hyperion.template.screen.game.GameLevelScreen;
+import com.hyperion.template.sound.SoundManager;
 import com.hyperion.template.ui.UiFactory;
 
 public class MainMenuScreen implements GameScreen {
@@ -21,7 +22,11 @@ public class MainMenuScreen implements GameScreen {
 
     public MainMenuScreen() {
 
-        stage = new Stage(new FitViewport(MyGdxGame.WIDTH, MyGdxGame.HEIGHT, new OrthographicCamera()));
+        stage = new Stage(new FitViewport(
+            MyGdxGame.WIDTH,
+            MyGdxGame.HEIGHT,
+            new OrthographicCamera()
+        ));
 
         Image backgroundImg = new Image(MyAssetManager.getTexture("texture/menu_background.png"));
 
@@ -39,29 +44,20 @@ public class MainMenuScreen implements GameScreen {
         versionLabel.setHeight(32);
         stage.addActor(versionLabel);
 
-        TextButton.TextButtonStyle largeButtonStyle = new TextButton.TextButtonStyle();
-        largeButtonStyle.font = MyAssetManager.getFont();
-
         TextButton startButton = UiFactory.textButton(
             "Start",
-            largeButtonStyle,
             1,
             () -> ScreenManager.pushScreen(new GameLevelScreen())
         );
 
-        TextButton.TextButtonStyle smallButtonStyle = new TextButton.TextButtonStyle();
-        smallButtonStyle.font = MyAssetManager.getFont();
-
         TextButton creditsButton = UiFactory.textButton(
             "Credits",
-            smallButtonStyle,
             0.75f,
             () -> Gdx.app.exit()
         );
 
         TextButton quitButton = UiFactory.textButton(
             "Quit",
-            smallButtonStyle,
             0.75f,
             () -> Gdx.app.exit()
         );
@@ -79,6 +75,11 @@ public class MainMenuScreen implements GameScreen {
         rootTable.row().height(48);
         rootTable.add(quitButton);
 
+    }
+
+    @Override
+    public void show() {
+        SoundManager.playMusic(getMusicPath());
     }
 
     @Override
@@ -102,6 +103,11 @@ public class MainMenuScreen implements GameScreen {
     @Override
     public void setInputProcessor() {
         Gdx.input.setInputProcessor(stage);
+    }
+
+    @Override
+    public String getMusicPath() {
+        return "music/Universfield - Retro Energy.ogg";
     }
 
 }

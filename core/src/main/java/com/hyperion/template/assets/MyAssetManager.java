@@ -5,6 +5,8 @@ import com.badlogic.gdx.assets.loaders.BitmapFontLoader;
 import com.badlogic.gdx.assets.loaders.FileHandleResolver;
 import com.badlogic.gdx.assets.loaders.TextureLoader;
 import com.badlogic.gdx.assets.loaders.resolvers.InternalFileHandleResolver;
+import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 
@@ -23,6 +25,14 @@ public class MyAssetManager {
         "menu_background.png"
     );
 
+    private static final List<String> musicFiles = List.of(
+        "Universfield - Retro Energy.ogg"
+    );
+
+    private static final List<String> soundFiles = List.of(
+        "Universfield - Button Click.ogg"
+    );
+
     private MyAssetManager() {
     }
 
@@ -31,7 +41,9 @@ public class MyAssetManager {
         loadTextures();
         loadFonts();
 
-        INSTANCE.finishLoading();
+        musicFiles.forEach(path -> assetManager.load("music/" + path, Music.class));
+        soundFiles.forEach(path -> assetManager.load("sound/" + path, Sound.class));
+
         assetManager.finishLoading();
     }
 
@@ -67,6 +79,14 @@ public class MyAssetManager {
 
     public static BitmapFont getFont() {
         return assetManager.get(FONT_PATH, BitmapFont.class);
+    }
+
+    public static Music getMusic(String path) {
+        return assetManager.get(path, Music.class);
+    }
+
+    public static Sound getSound(String path) {
+        return assetManager.get(path, Sound.class);
     }
 
     public static void dispose() {
