@@ -37,7 +37,7 @@ public class MainMenuScreen implements GameScreen {
         Label.LabelStyle smallLabelStyle = new Label.LabelStyle();
         smallLabelStyle.font = MyAssetManager.getFont();
 
-        Label versionLabel = new Label(MyGdxGame.VERSION, smallLabelStyle);
+        Label versionLabel = new Label(MyGdxGame.getVersion(), smallLabelStyle);
         versionLabel.setPosition(8, 0);
         versionLabel.getColor().a = 0.5f;
         versionLabel.setFontScale(0.5f);

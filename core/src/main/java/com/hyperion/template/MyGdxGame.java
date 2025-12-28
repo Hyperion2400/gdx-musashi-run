@@ -1,6 +1,7 @@
 package com.hyperion.template;
 
 import com.badlogic.gdx.Game;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.hyperion.template.assets.MyAssetManager;
@@ -13,14 +14,17 @@ import com.hyperion.template.state.SettingsManager;
  */
 public class MyGdxGame extends Game {
 
-    public static final String VERSION = "v0.0.1";
     public static final String TITLE = "MyGdxGame";
 
     public static final short WIDTH = 1280;
     public static final short HEIGHT = 720;
 
+    private static String version;
+
     @Override
     public void create() {
+
+        loadProjectVersion();
 
         SettingsManager.create();
         ScreenManager.create(this);
@@ -28,6 +32,15 @@ public class MyGdxGame extends Game {
         MyAssetManager.loadAssets();
 
         ScreenManager.pushScreen((new MainMenuScreen()));
+    }
+
+    private void loadProjectVersion() {
+
+        // needs project_version file to be created in build.gradle
+        if (Gdx.files.internal("project_version").exists()) {
+            version = Gdx.files.internal("project_version").readString();
+            Gdx.graphics.setTitle(TITLE + " " + version);
+        }
     }
 
     @Override
@@ -46,4 +59,7 @@ public class MyGdxGame extends Game {
         ScreenManager.dispose();
     }
 
+    public static String getVersion() {
+        return version;
+    }
 }

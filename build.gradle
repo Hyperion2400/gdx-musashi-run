@@ -46,6 +46,9 @@ configure(subprojects) {
     fileTree(assetsFolder).collect { assetsFolder.relativePath(it) }.sort().each {
       assetsFile.append(it + "\n")
     }
+
+    // write project version into assets so it can be displayed in the game
+    file("${project.rootDir}/assets/project_version").text = "v${projectVersion}"
   }
   processResources.dependsOn 'generateAssetList'
 
