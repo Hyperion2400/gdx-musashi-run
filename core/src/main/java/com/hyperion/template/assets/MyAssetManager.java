@@ -19,20 +19,18 @@ public class MyAssetManager {
 
     private static final AssetManager assetManager = new AssetManager();
 
-    private static final String FONT_PATH = "font/patrick_hand_64.fnt";
-
     private static final List<String> textureFiles = List.of(
-        "menu_background.png",
-        "checkbox_off.png",
-        "checkbox_on.png"
+        Paths.MENU_BACKGROUND,
+        Paths.CHECKBOX_OFF,
+        Paths.CHECKBOX_ON
     );
 
     private static final List<String> musicFiles = List.of(
-        "Universfield - Retro Energy.ogg"
+        Paths.MENU_MUSIC
     );
 
     private static final List<String> soundFiles = List.of(
-        "Universfield - Button Click.ogg"
+        Paths.BUTTON_CLICK
     );
 
     private MyAssetManager() {
@@ -43,8 +41,8 @@ public class MyAssetManager {
         loadTextures();
         loadFonts();
 
-        musicFiles.forEach(path -> assetManager.load("music/" + path, Music.class));
-        soundFiles.forEach(path -> assetManager.load("sound/" + path, Sound.class));
+        musicFiles.forEach(path -> assetManager.load(path, Music.class));
+        soundFiles.forEach(path -> assetManager.load(path, Sound.class));
 
         assetManager.finishLoading();
     }
@@ -54,11 +52,7 @@ public class MyAssetManager {
         var textureParams = new TextureLoader.TextureParameter();
         textureParams.minFilter = Texture.TextureFilter.Linear;
         textureParams.magFilter = Texture.TextureFilter.Linear;
-        textureFiles.forEach(path -> assetManager.load(
-            "texture/" + path,
-            Texture.class,
-            textureParams
-        ));
+        textureFiles.forEach(path -> assetManager.load(path, Texture.class, textureParams));
     }
 
     private static void loadFonts() {
@@ -66,7 +60,7 @@ public class MyAssetManager {
         FileHandleResolver resolver = new InternalFileHandleResolver();
         assetManager.setLoader(BitmapFont.class, ".fnt", new BitmapFontLoader(resolver));
 
-        assetManager.load(FONT_PATH, BitmapFont.class, fontParams());
+        assetManager.load(Paths.FONT, BitmapFont.class, fontParams());
     }
 
     private static BitmapFontLoader.BitmapFontParameter fontParams() {
@@ -83,7 +77,7 @@ public class MyAssetManager {
     }
 
     public static BitmapFont getFont() {
-        return assetManager.get(FONT_PATH, BitmapFont.class);
+        return assetManager.get(Paths.FONT, BitmapFont.class);
     }
 
     public static Music getMusic(String path) {

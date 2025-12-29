@@ -10,6 +10,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.hyperion.template.MyGdxGame;
 import com.hyperion.template.assets.MyAssetManager;
+import com.hyperion.template.assets.Paths;
 import com.hyperion.template.screen.GameScreen;
 import com.hyperion.template.screen.ScreenManager;
 import com.hyperion.template.screen.credits.CreditsScreen;
@@ -30,7 +31,7 @@ public class MainMenuScreen implements GameScreen {
             new OrthographicCamera()
         ));
 
-        Image backgroundImg = new Image(MyAssetManager.getTexture("texture/menu_background.png"));
+        Image backgroundImg = new Image(MyAssetManager.getTexture(Paths.MENU_BACKGROUND));
 
         backgroundImg.setWidth(MyGdxGame.WIDTH);
         backgroundImg.setHeight(MyGdxGame.HEIGHT);
@@ -117,7 +118,7 @@ public class MainMenuScreen implements GameScreen {
 
     @Override
     public String getMusicPath() {
-        return "music/Universfield - Retro Energy.ogg";
+        return Paths.MENU_MUSIC;
     }
 
 }

@@ -7,6 +7,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.Align;
 import com.hyperion.template.assets.MyAssetManager;
+import com.hyperion.template.assets.Paths;
 import com.hyperion.template.sound.SoundManager;
 
 public class UiFactory {
@@ -50,7 +51,7 @@ public class UiFactory {
         checkBox.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                SoundManager.playSound("sound/Universfield - Button Click.ogg");
+                SoundManager.playSound(Paths.BUTTON_CLICK);
                 runnable.run();
             }
         });

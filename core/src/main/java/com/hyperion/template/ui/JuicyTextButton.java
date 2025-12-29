@@ -3,6 +3,7 @@ package com.hyperion.template.ui;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.hyperion.template.assets.Paths;
 import com.hyperion.template.sound.SoundManager;
 
 /**
@@ -26,7 +27,7 @@ public class JuicyTextButton extends TextButton {
         addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                SoundManager.playSound("sound/Universfield - Button Click.ogg");
+                SoundManager.playSound(Paths.BUTTON_CLICK);
                 setScale(defaultScale * AFTER_CLICK_SCALE);
             }
         });

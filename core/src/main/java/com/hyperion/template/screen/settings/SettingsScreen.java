@@ -8,6 +8,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.hyperion.template.MyGdxGame;
 import com.hyperion.template.assets.MyAssetManager;
+import com.hyperion.template.assets.Paths;
 import com.hyperion.template.screen.GameScreen;
 import com.hyperion.template.screen.ScreenManager;
 import com.hyperion.template.screen.menu.MainMenuScreen;
@@ -30,7 +31,7 @@ public class SettingsScreen implements GameScreen {
                 new OrthographicCamera()
         ));
 
-        Image menuBackgroundImg = new Image(MyAssetManager.getTexture("texture/menu_background.png"));
+        Image menuBackgroundImg = new Image(MyAssetManager.getTexture(Paths.MENU_BACKGROUND));
         menuBackgroundImg.setWidth(MyGdxGame.WIDTH);
         menuBackgroundImg.setHeight(MyGdxGame.HEIGHT);
         menuBackgroundImg.getColor().a = 0.5f;
@@ -47,8 +48,8 @@ public class SettingsScreen implements GameScreen {
 
         Label header = new Label("Settings", labelStyle);
 
-        Image checkboxOffImg = new Image(MyAssetManager.getTexture("texture/checkbox_off.png"));
-        Image checkboxOnImg = new Image(MyAssetManager.getTexture("texture/checkbox_on.png"));
+        Image checkboxOffImg = new Image(MyAssetManager.getTexture(Paths.CHECKBOX_OFF));
+        Image checkboxOnImg = new Image(MyAssetManager.getTexture(Paths.CHECKBOX_ON));
 
         CheckBox.CheckBoxStyle checkBoxStyle = new CheckBox.CheckBoxStyle();
         checkBoxStyle.font = MyAssetManager.getFont();
@@ -160,6 +161,6 @@ public class SettingsScreen implements GameScreen {
 
     @Override
     public String getMusicPath() {
-        return "music/Universfield - Retro Energy.ogg";
+        return Paths.MENU_MUSIC;
     }
 }
