@@ -13,6 +13,7 @@ import com.hyperion.template.assets.MyAssetManager;
 import com.hyperion.template.screen.GameScreen;
 import com.hyperion.template.screen.ScreenManager;
 import com.hyperion.template.screen.game.GameLevelScreen;
+import com.hyperion.template.screen.settings.SettingsScreen;
 import com.hyperion.template.sound.SoundManager;
 import com.hyperion.template.ui.UiFactory;
 
@@ -50,6 +51,12 @@ public class MainMenuScreen implements GameScreen {
             () -> ScreenManager.pushScreen(new GameLevelScreen())
         );
 
+        TextButton settingsButton = UiFactory.textButton(
+            "Settings",
+            0.75f,
+            () -> ScreenManager.pushScreen(new SettingsScreen())
+        );
+
         TextButton creditsButton = UiFactory.textButton(
             "Credits",
             0.75f,
@@ -70,6 +77,8 @@ public class MainMenuScreen implements GameScreen {
 
         rootTable.left().defaults().height(64).fill().pad(16);
         rootTable.add(startButton);
+        rootTable.row().height(48);
+        rootTable.add(settingsButton);
         rootTable.row().height(48);
         rootTable.add(creditsButton);
         rootTable.row().height(48);

@@ -19,10 +19,12 @@ public class MyAssetManager {
 
     private static final AssetManager assetManager = new AssetManager();
 
-    private static final String FONT_PATH = "ui/patrick_hand_64.fnt";
+    private static final String FONT_PATH = "font/patrick_hand_64.fnt";
 
     private static final List<String> textureFiles = List.of(
-        "menu_background.png"
+        "menu_background.png",
+        "checkbox_off.png",
+        "checkbox_on.png"
     );
 
     private static final List<String> musicFiles = List.of(
@@ -69,7 +71,10 @@ public class MyAssetManager {
 
     private static BitmapFontLoader.BitmapFontParameter fontParams() {
         BitmapFontLoader.BitmapFontParameter parameter = new BitmapFontLoader.BitmapFontParameter();
+        // prevents pixelation when scaling down
         parameter.minFilter = Texture.TextureFilter.Linear;
+        // prevents pixelation when scaling up
+        parameter.magFilter = Texture.TextureFilter.Linear;
         return parameter;
     }
 
