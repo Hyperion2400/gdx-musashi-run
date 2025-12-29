@@ -12,6 +12,7 @@ import com.hyperion.template.MyGdxGame;
 import com.hyperion.template.assets.MyAssetManager;
 import com.hyperion.template.screen.GameScreen;
 import com.hyperion.template.screen.ScreenManager;
+import com.hyperion.template.screen.credits.CreditsScreen;
 import com.hyperion.template.screen.game.GameLevelScreen;
 import com.hyperion.template.screen.settings.SettingsScreen;
 import com.hyperion.template.sound.SoundManager;
@@ -60,7 +61,7 @@ public class MainMenuScreen implements GameScreen {
         TextButton creditsButton = UiFactory.textButton(
             "Credits",
             0.75f,
-            () -> Gdx.app.exit()
+            () -> ScreenManager.pushScreen(new CreditsScreen())
         );
 
         TextButton quitButton = UiFactory.textButton(
