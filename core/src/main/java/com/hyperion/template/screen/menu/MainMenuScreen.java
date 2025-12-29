@@ -2,6 +2,7 @@ package com.hyperion.template.screen.menu;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
@@ -9,14 +10,14 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.hyperion.template.MyGdxGame;
-import com.hyperion.template.assets.MyAssetManager;
 import com.hyperion.template.assets.Paths;
+import com.hyperion.template.audio.AudioManager;
 import com.hyperion.template.screen.GameScreen;
 import com.hyperion.template.screen.ScreenManager;
 import com.hyperion.template.screen.credits.CreditsScreen;
-import com.hyperion.template.screen.game.GameLevelScreen;
+import com.hyperion.template.screen.play.PlayScreen;
 import com.hyperion.template.screen.settings.SettingsScreen;
-import com.hyperion.template.sound.SoundManager;
+import com.hyperion.template.ui.FontSize;
 import com.hyperion.template.ui.UiFactory;
 
 public class MainMenuScreen implements GameScreen {
@@ -25,72 +26,66 @@ public class MainMenuScreen implements GameScreen {
 
     public MainMenuScreen() {
 
-        stage = new Stage(new FitViewport(
-            MyGdxGame.WIDTH,
-            MyGdxGame.HEIGHT,
-            new OrthographicCamera()
-        ));
-
-        Image backgroundImg = new Image(MyAssetManager.getTexture(Paths.MENU_BACKGROUND));
-
-        backgroundImg.setWidth(MyGdxGame.WIDTH);
-        backgroundImg.setHeight(MyGdxGame.HEIGHT);
-        stage.addActor(backgroundImg);
-
-        Label.LabelStyle smallLabelStyle = new Label.LabelStyle();
-        smallLabelStyle.font = MyAssetManager.getFont();
-
-        Label versionLabel = new Label(MyGdxGame.getVersion(), smallLabelStyle);
-        versionLabel.setPosition(8, 0);
-        versionLabel.getColor().a = 0.5f;
-        versionLabel.setFontScale(0.5f);
-        versionLabel.setHeight(32);
-        stage.addActor(versionLabel);
-
         TextButton startButton = UiFactory.textButton(
             "Start",
-            1,
-            () -> ScreenManager.pushScreen(new GameLevelScreen())
+            FontSize.LARGE,
+            () -> ScreenManager.pushScreen(new PlayScreen())
         );
 
         TextButton settingsButton = UiFactory.textButton(
             "Settings",
-            0.75f,
+            FontSize.MEDIUM,
             () -> ScreenManager.pushScreen(new SettingsScreen())
         );
 
         TextButton creditsButton = UiFactory.textButton(
             "Credits",
-            0.75f,
+            FontSize.MEDIUM,
             () -> ScreenManager.pushScreen(new CreditsScreen())
         );
 
         TextButton quitButton = UiFactory.textButton(
             "Quit",
-            0.75f,
+            FontSize.MEDIUM,
             () -> Gdx.app.exit()
         );
 
-        Table rootTable = new Table();
-        rootTable.setFillParent(true);
-        rootTable.padLeft(200);
-        rootTable.setDebug(false);
-        stage.addActor(rootTable);
+        Table table = new Table();
+        table.setFillParent(true);
+        table.padLeft(200);
+        table.setDebug(false);
 
-        rootTable.left().defaults().height(64).fill().pad(16);
-        rootTable.add(startButton);
-        rootTable.row().height(48);
-        rootTable.add(settingsButton);
-        rootTable.row().height(48);
-        rootTable.add(creditsButton);
-        rootTable.row().height(48);
-        rootTable.add(quitButton);
+        table.left().defaults().height(64).fill().pad(16);
+        table.add(startButton);
+        table.row();
+        table.add(settingsButton);
+        table.row();
+        table.add(creditsButton);
+        table.row();
+        table.add(quitButton);
 
+        Image menuBackgroundImg = UiFactory.menuBackground();
+
+        stage = new Stage(new FitViewport(
+            MyGdxGame.WIDTH,
+            MyGdxGame.HEIGHT,
+            new OrthographicCamera()
+        ));
+        stage.addActor(menuBackgroundImg);
+        stage.addActor(table);
+        stage.addActor(versionLabel());
+    }
+
+    private Actor versionLabel() {
+        Label versionLabel = UiFactory.label(MyGdxGame.getVersion(), FontSize.SMALL);
+        versionLabel.setPosition(8, 0);
+        versionLabel.getColor().a = 0.5f;
+        return versionLabel;
     }
 
     @Override
     public void show() {
-        SoundManager.playMusic(getMusicPath());
+        AudioManager.playMusic(getMusicPath());
     }
 
     @Override

@@ -4,7 +4,7 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.hyperion.template.assets.Paths;
-import com.hyperion.template.sound.SoundManager;
+import com.hyperion.template.audio.AudioManager;
 
 /**
  * TextButton with simple click animation and sound effects.
@@ -27,7 +27,7 @@ public class JuicyTextButton extends TextButton {
         addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                SoundManager.playSound(Paths.BUTTON_CLICK);
+                AudioManager.playSound(Paths.BUTTON_CLICK);
                 setScale(defaultScale * AFTER_CLICK_SCALE);
             }
         });

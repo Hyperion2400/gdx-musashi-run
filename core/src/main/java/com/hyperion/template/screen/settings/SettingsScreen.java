@@ -4,135 +4,136 @@ import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.*;
+import com.badlogic.gdx.scenes.scene2d.ui.CheckBox;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.hyperion.template.MyGdxGame;
-import com.hyperion.template.assets.MyAssetManager;
 import com.hyperion.template.assets.Paths;
+import com.hyperion.template.audio.AudioManager;
 import com.hyperion.template.screen.GameScreen;
 import com.hyperion.template.screen.ScreenManager;
 import com.hyperion.template.screen.menu.MainMenuScreen;
-import com.hyperion.template.sound.SoundManager;
-import com.hyperion.template.state.SettingsManager;
+import com.hyperion.template.settings.SettingsManager;
+import com.hyperion.template.ui.FontSize;
 import com.hyperion.template.ui.UiFactory;
 
 public class SettingsScreen implements GameScreen {
 
     private final Stage stage;
-    private final CheckBox fullscreenCheckBox;
-    private final CheckBox soundCheckBox;
-    private final CheckBox musicCheckBox;
+
+    private CheckBox fullscreenCheckBox;
+    private CheckBox soundCheckBox;
+    private CheckBox musicCheckBox;
 
     public SettingsScreen() {
+
+        Image menuBackgroundImg = UiFactory.menuBackground();
+        menuBackgroundImg.getColor().a = 0.5f;
+
+        Table table = settingsTable();
 
         stage = new Stage(new FitViewport(
                 MyGdxGame.WIDTH,
                 MyGdxGame.HEIGHT,
                 new OrthographicCamera()
         ));
-
-        Image menuBackgroundImg = new Image(MyAssetManager.getTexture(Paths.MENU_BACKGROUND));
-        menuBackgroundImg.setWidth(MyGdxGame.WIDTH);
-        menuBackgroundImg.setHeight(MyGdxGame.HEIGHT);
-        menuBackgroundImg.getColor().a = 0.5f;
         stage.addActor(menuBackgroundImg);
+        stage.addActor(table);
+    }
 
-        Table rootTable = new Table();
-        rootTable.setFillParent(true);
-        rootTable.pad(80, 140, 80, 140);
-        rootTable.setDebug(false);
-        stage.addActor(rootTable);
+    private Table settingsTable() {
 
-        Label.LabelStyle labelStyle = new Label.LabelStyle();
-        labelStyle.font = MyAssetManager.getFont();
-
-        Label header = new Label("Settings", labelStyle);
-
-        Image checkboxOffImg = new Image(MyAssetManager.getTexture(Paths.CHECKBOX_OFF));
-        Image checkboxOnImg = new Image(MyAssetManager.getTexture(Paths.CHECKBOX_ON));
-
-        CheckBox.CheckBoxStyle checkBoxStyle = new CheckBox.CheckBoxStyle();
-        checkBoxStyle.font = MyAssetManager.getFont();
-        checkBoxStyle.checkboxOff = checkboxOffImg.getDrawable();
-        checkBoxStyle.checkboxOn = checkboxOnImg.getDrawable();
-
-        Label fullscreenLabel = new Label("Fullscreen", labelStyle);
-        fullscreenLabel.setFontScale(0.75f);
-        fullscreenLabel.setHeight(48);
-        fullscreenCheckBox = UiFactory.createCheckBox(
-                checkBoxStyle, Gdx.graphics.isFullscreen(),
-                0.75f,
-                this::updateFullscreen
+        fullscreenCheckBox = UiFactory.checkBox(
+                Gdx.graphics.isFullscreen(),
+                FontSize.MEDIUM,
+                this::changeFullscreenSetting
         );
-        fullscreenCheckBox.padLeft(16);
-        fullscreenCheckBox.padBottom(16);
+        fullscreenCheckBox.padLeft(20);
+        fullscreenCheckBox.padBottom(20);
 
-        Label musicLabel = new Label("Music", labelStyle);
-        musicLabel.setFontScale(0.75f);
-        musicLabel.setHeight(48);
-        musicCheckBox = UiFactory.createCheckBox(
-                checkBoxStyle, SettingsManager.isMusicEnabled(),
-                0.75f,
-                this::updateMusic
+        musicCheckBox = UiFactory.checkBox(
+                SettingsManager.isMusicEnabled(),
+                FontSize.MEDIUM,
+                this::changeMusicSetting
         );
-        musicCheckBox.padLeft(16);
-        musicCheckBox.padBottom(16);
+        musicCheckBox.padLeft(20);
+        musicCheckBox.padBottom(20);
 
-        Label soundLabel = new Label("Sound", labelStyle);
-        soundLabel.setFontScale(0.75f);
-        soundLabel.setHeight(48);
-        soundCheckBox = UiFactory.createCheckBox(
-                checkBoxStyle, SettingsManager.isSoundEnabled(),
-                0.75f,
-                this::updateSound
+        soundCheckBox = UiFactory.checkBox(
+                SettingsManager.isSoundEnabled(),
+                FontSize.MEDIUM,
+                this::changeSoundSetting
         );
-        soundCheckBox.padLeft(16);
-        soundCheckBox.padBottom(16);
+        soundCheckBox.padLeft(20);
+        soundCheckBox.padBottom(20);
 
         TextButton backButton = UiFactory.textButton(
                 "Back",
-                1,
+                FontSize.LARGE,
                 () -> ScreenManager.pushScreen(new MainMenuScreen())
         );
 
-        rootTable.top().left().defaults().left().height(80);
-        rootTable.add(header).width(600);
-        rootTable.add().width(400);
-        rootTable.row();
-        rootTable.add().height(0).expandY();
+        Table table = UiFactory.fullSizeTable();
+
+        int checkBoxCellSize = 80;
+        // by how much the main content is offset inside the table
+        int contentIndent = 240;
+
+        // HEADER
+        table.top().left().defaults().left().height(80);
+        table.add(UiFactory.label("Settings", FontSize.LARGE)).width(600);
+        table.add().width(400);
+
+        // FILLER
+        table.row();
+        table.add().height(0).expandY();
+
+        // FULLSCREEN SETTING
         if (Gdx.app.getType() == Application.ApplicationType.Desktop) {
-            rootTable.row();
-            rootTable.add(fullscreenLabel).padLeft(240);
-            rootTable.add(fullscreenCheckBox).width(80);
+            table.row();
+            table.add(UiFactory.label("Fullscreen", FontSize.MEDIUM)).padLeft(contentIndent);
+            table.add(fullscreenCheckBox).width(checkBoxCellSize);
         }
-        rootTable.row();
-        rootTable.add(musicLabel).padLeft(240);
-        rootTable.add(musicCheckBox).width(80);
-        rootTable.row();
-        rootTable.add(soundLabel).padLeft(240);
-        rootTable.add(soundCheckBox).width(80);
-        rootTable.row();
-        rootTable.add().height(0).expandY();
-        rootTable.row();
-        rootTable.add();
-        rootTable.add(backButton).right().bottom();
+
+        // MUSIC SETTING
+        table.row();
+        table.add(UiFactory.label("Music", FontSize.MEDIUM)).padLeft(contentIndent);
+        table.add(musicCheckBox).width(checkBoxCellSize);
+
+        // SOUND SETTING
+        table.row();
+        table.add(UiFactory.label("Sound", FontSize.MEDIUM)).padLeft(contentIndent);
+        table.add(soundCheckBox).width(checkBoxCellSize);
+
+        // FILLER
+        table.row();
+        table.add().height(0).expandY();
+
+        // BACK BUTTON
+        table.row();
+        table.add();
+        table.add(backButton).right().bottom();
+
+        return table;
     }
 
-    private void updateFullscreen() {
+    private void changeFullscreenSetting() {
         SettingsManager.setFullScreen(fullscreenCheckBox.isChecked());
     }
 
-    private void updateMusic() {
+    private void changeMusicSetting() {
         boolean isMusic = musicCheckBox.isChecked();
         SettingsManager.setMusicEnabled(isMusic);
         if (!isMusic) {
-            SoundManager.stopMusic();
+            AudioManager.stopMusic();
         } else {
-            SoundManager.playMusic(getMusicPath());
+            AudioManager.playMusic(getMusicPath());
         }
     }
 
-    private void updateSound() {
+    private void changeSoundSetting() {
         SettingsManager.setSoundEnabled(soundCheckBox.isChecked());
     }
 

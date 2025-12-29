@@ -6,7 +6,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.hyperion.template.MyGdxGame;
-import com.hyperion.template.sound.SoundManager;
+import com.hyperion.template.audio.AudioManager;
 
 /**
  * Renders and transitions screens.
@@ -19,7 +19,7 @@ public class ScreenManager {
     private static float transitionDuration = 0.8f;
     private static boolean fadingIn = false;
     private static boolean fadingOut = false;
-    private static float transitionOverlayAlpha = 1;
+    private static float overlayOpacity = 1;
 
     private static GameScreen nextScreen = null;
 
@@ -34,7 +34,7 @@ public class ScreenManager {
     }
 
     public static void pushScreen(GameScreen screen) {
-        transitionTo(screen, 0.8f);
+        transitionTo(screen, 0.6f);
     }
 
     private static void transitionTo(GameScreen screen, float transitionDuration) {
@@ -52,11 +52,11 @@ public class ScreenManager {
 
         if (game.getScreen() == null) {
             fadingIn = true;
-            transitionOverlayAlpha = 1;
+            overlayOpacity = 1;
             game.setScreen(screen);
         } else {
             fadingOut = true;
-            transitionOverlayAlpha = 0;
+            overlayOpacity = 0;
 
             if (game.getScreen() instanceof GameScreen gameScreen) {
                 gameScreen.clearInputProcessor();
@@ -79,30 +79,30 @@ public class ScreenManager {
 
     private static void update() {
         if (fadingIn) {
-            transitionOverlayAlpha -= Gdx.graphics.getDeltaTime() / (transitionDuration / 2);
+            overlayOpacity -= Gdx.graphics.getDeltaTime() / (transitionDuration / 2);
 
-            if (transitionOverlayAlpha <= 0) {
+            if (overlayOpacity <= 0) {
                 fadingIn = false;
-                transitionOverlayAlpha = 0;
+                overlayOpacity = 0;
 
                 if (game.getScreen() instanceof GameScreen gameScreen) {
                     gameScreen.setInputProcessor();
                 }
             }
         } else if (fadingOut) {
-            transitionOverlayAlpha += Gdx.graphics.getDeltaTime() / (transitionDuration / 2);
+            overlayOpacity += Gdx.graphics.getDeltaTime() / (transitionDuration / 2);
 
 
-            if (transitionOverlayAlpha < 1) {
+            if (overlayOpacity < 1) {
                 // if next screen has a music path and it differs from current, fade out music as well
                 if (nextScreen.getMusicPath() != null
-                    && !nextScreen.getMusicPath().equals(SoundManager.getCurrentMusicPath())) {
-                    SoundManager.setVolume(1 - transitionOverlayAlpha);
+                    && !nextScreen.getMusicPath().equals(AudioManager.getCurrentMusicPath())) {
+                    AudioManager.setVolume(1 - overlayOpacity);
                 }
             } else {
                 fadingIn = true;
                 fadingOut = false;
-                transitionOverlayAlpha = 1;
+                overlayOpacity = 1;
 
                 Screen lastScreen = game.getScreen();
                 game.setScreen(nextScreen);
@@ -116,7 +116,7 @@ public class ScreenManager {
         Gdx.gl.glEnable(GL20.GL_BLEND);
 
         shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
-        shapeRenderer.getColor().a = transitionOverlayAlpha;
+        shapeRenderer.getColor().a = overlayOpacity;
         shapeRenderer.rect(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         shapeRenderer.end();
 

@@ -1,18 +1,18 @@
-package com.hyperion.template.sound;
+package com.hyperion.template.audio;
 
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
 import com.hyperion.template.assets.MyAssetManager;
-import com.hyperion.template.state.SettingsManager;
+import com.hyperion.template.settings.SettingsManager;
 
-public class SoundManager {
+public class AudioManager {
 
     private static final float MAX_MUSIC_VOLUME = 1f;
 
     private static String currentMusicPath;
     private static Music music;
 
-    private SoundManager() {
+    private AudioManager() {
     }
 
     public static void playMusic(String musicPath) {

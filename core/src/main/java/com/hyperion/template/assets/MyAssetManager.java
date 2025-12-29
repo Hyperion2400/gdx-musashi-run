@@ -17,6 +17,9 @@ import java.util.List;
  */
 public class MyAssetManager {
 
+    // font size of the bitmap font. used for scaling calculations.
+    public static final int BITMAP_FONT_SIZE = 64;
+
     private static final AssetManager assetManager = new AssetManager();
 
     private static final List<String> textureFiles = List.of(

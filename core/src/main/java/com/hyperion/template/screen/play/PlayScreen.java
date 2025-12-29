@@ -1,18 +1,18 @@
-package com.hyperion.template.screen.game;
+package com.hyperion.template.screen.play;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.hyperion.template.screen.GameScreen;
-import com.hyperion.template.sound.SoundManager;
+import com.hyperion.template.audio.AudioManager;
 
-public class GameLevelScreen implements GameScreen {
+public class PlayScreen implements GameScreen {
 
-    public GameLevelScreen() {
+    public PlayScreen() {
     }
 
     @Override
     public void show() {
-        SoundManager.playMusic(getMusicPath());
+        AudioManager.playMusic(getMusicPath());
     }
 
     @Override

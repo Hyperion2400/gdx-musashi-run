@@ -9,11 +9,11 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.hyperion.template.MyGdxGame;
-import com.hyperion.template.assets.MyAssetManager;
 import com.hyperion.template.assets.Paths;
 import com.hyperion.template.screen.GameScreen;
 import com.hyperion.template.screen.ScreenManager;
 import com.hyperion.template.screen.menu.MainMenuScreen;
+import com.hyperion.template.ui.FontSize;
 import com.hyperion.template.ui.UiFactory;
 
 public class CreditsScreen implements GameScreen {
@@ -21,6 +21,10 @@ public class CreditsScreen implements GameScreen {
     private final Stage stage;
 
     public CreditsScreen() {
+        Image menuBackgroundImg = UiFactory.menuBackground();
+        menuBackgroundImg.getColor().a = 0.5f;
+
+        Table table = creditsTable();
 
         stage = new Stage(new FitViewport(
             MyGdxGame.WIDTH,
@@ -28,64 +32,61 @@ public class CreditsScreen implements GameScreen {
             new OrthographicCamera()
         ));
 
-        Image menuBackgroundImg = new Image(MyAssetManager.getTexture(Paths.MENU_BACKGROUND));
-        menuBackgroundImg.setWidth(MyGdxGame.WIDTH);
-        menuBackgroundImg.setHeight(MyGdxGame.HEIGHT);
-        menuBackgroundImg.getColor().a = 0.5f;
         stage.addActor(menuBackgroundImg);
+        stage.addActor(table);
+    }
 
-        Table rootTable = new Table();
-        rootTable.setFillParent(true);
-        rootTable.pad(80, 140, 80, 140);
-        rootTable.setDebug(false);
-        stage.addActor(rootTable);
-
-        Label.LabelStyle labelStyle = new Label.LabelStyle();
-        labelStyle.font = MyAssetManager.getFont();
-
-        Label header = new Label("Credits", labelStyle);
-
-        Label leftLabel = new Label(
+    private Table creditsTable() {
+        Label leftContent = UiFactory.label(
             """
                 Programming
+                Font
                 Music
-                Sound
-                """,
-            labelStyle
+                Sound""",
+            FontSize.SMALL
         );
-        leftLabel.setFontScale(0.5f);
-        leftLabel.setHeight(32);
 
-        Label rightLabel = new Label(
+        Label rightContent = UiFactory.label(
             """
                 Hyperion2400
+                Patrick Hand by Patrick Wagesreiter
                 Retro Energy by Universfield
-                Button Click by Universfield
-                """,
-            labelStyle
+                Button Click by Universfield""",
+            FontSize.SMALL
         );
-        rightLabel.setFontScale(0.5f);
-        rightLabel.setHeight(32);
 
         TextButton backButton = UiFactory.textButton(
             "Back",
-            1,
+            FontSize.LARGE,
             () -> ScreenManager.pushScreen(new MainMenuScreen())
         );
 
-        rootTable.top().left().defaults().left().height(80);
-        rootTable.add(header).width(400);
-        rootTable.add().width(600);
-        rootTable.row();
-        rootTable.add().height(0).expandY();
-        rootTable.row();
-        rootTable.add(leftLabel).padLeft(100);
-        rootTable.add(rightLabel);
-        rootTable.row();
-        rootTable.add().height(0).expandY();
-        rootTable.row();
-        rootTable.add();
-        rootTable.add(backButton).right().bottom();
+        Table table = UiFactory.fullSizeTable();
+
+        // HEADER
+        table.top().left().defaults().left();
+        table.add(UiFactory.label("Credits", FontSize.LARGE)).width(400);
+        table.add().width(600);
+
+        // FILLER
+        table.row();
+        table.add().expandY();
+
+        // CONTENT
+        table.row();
+        table.add(leftContent).padLeft(100);
+        table.add(rightContent);
+
+        // FILLER
+        table.row();
+        table.add().expandY();
+
+        // BACK BUTTON
+        table.row();
+        table.add();
+        table.add(backButton).right().bottom();
+
+        return table;
     }
 
     @Override

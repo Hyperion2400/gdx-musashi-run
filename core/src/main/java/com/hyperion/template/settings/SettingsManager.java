@@ -1,4 +1,4 @@
-package com.hyperion.template.state;
+package com.hyperion.template.settings;
 
 import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Gdx;
@@ -8,6 +8,7 @@ import com.hyperion.template.MyGdxGame;
 public class SettingsManager {
 
     public static final String PATH = MyGdxGame.TITLE + "/settings";
+
     public static final String FULLSCREEN = "fullscreen";
     public static final String MUSIC = "music";
     public static final String SOUND = "sound";
