@@ -9,6 +9,7 @@ import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 
 import java.util.List;
 
@@ -25,7 +26,13 @@ public class MyAssetManager {
     private static final List<String> textureFiles = List.of(
         Paths.MENU_BACKGROUND,
         Paths.CHECKBOX_OFF,
-        Paths.CHECKBOX_ON
+        Paths.CHECKBOX_ON,
+        Paths.WORLD_BACKGROUND,
+        Paths.WORLD_MAP
+    );
+
+    private static final List<String> textureAtlasFiles = List.of(
+        Paths.WARRIOR_SPRITE_SHEET
     );
 
     private static final List<String> musicFiles = List.of(
@@ -42,6 +49,9 @@ public class MyAssetManager {
     public static void loadAssets() {
 
         loadTextures();
+
+        textureAtlasFiles.forEach(path -> assetManager.load(path, TextureAtlas.class));
+
         loadFonts();
 
         musicFiles.forEach(path -> assetManager.load(path, Music.class));
@@ -51,10 +61,11 @@ public class MyAssetManager {
     }
 
     private static void loadTextures() {
-        // TEXTURES
         var textureParams = new TextureLoader.TextureParameter();
-        textureParams.minFilter = Texture.TextureFilter.Linear;
-        textureParams.magFilter = Texture.TextureFilter.Linear;
+        // we don't want TextureFilter.Linear here because it makes the pixel art blurry.
+        // but if you don't use pixel art you might want to use this to avoid scaling artifacts.
+        // textureParams.minFilter = Texture.TextureFilter.Linear;
+        // textureParams.magFilter = Texture.TextureFilter.Linear;
         textureFiles.forEach(path -> assetManager.load(path, Texture.class, textureParams));
     }
 
@@ -77,6 +88,10 @@ public class MyAssetManager {
 
     public static Texture getTexture(String path) {
         return assetManager.get(path, Texture.class);
+    }
+
+    public static TextureAtlas getTextureAtlas(String path) {
+        return assetManager.get(path, TextureAtlas.class);
     }
 
     public static BitmapFont getFont() {

@@ -15,7 +15,7 @@ import com.hyperion.template.audio.AudioManager;
 import com.hyperion.template.screen.GameScreen;
 import com.hyperion.template.screen.ScreenManager;
 import com.hyperion.template.screen.credits.CreditsScreen;
-import com.hyperion.template.screen.play.PlayScreen;
+import com.hyperion.template.screen.world.WorldScreen;
 import com.hyperion.template.screen.settings.SettingsScreen;
 import com.hyperion.template.ui.FontSize;
 import com.hyperion.template.ui.UiFactory;
@@ -29,7 +29,7 @@ public class MainMenuScreen implements GameScreen {
         TextButton startButton = UiFactory.textButton(
             "Start",
             FontSize.LARGE,
-            () -> ScreenManager.pushScreen(new PlayScreen())
+            () -> ScreenManager.pushScreen(new WorldScreen())
         );
 
         TextButton settingsButton = UiFactory.textButton(

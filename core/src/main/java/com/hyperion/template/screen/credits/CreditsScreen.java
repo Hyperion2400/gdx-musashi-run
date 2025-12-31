@@ -40,6 +40,8 @@ public class CreditsScreen implements GameScreen {
         Label leftContent = UiFactory.label(
             """
                 Programming
+                Tileset
+                Sprite sheets
                 Font
                 Music
                 Sound""",
@@ -49,9 +51,11 @@ public class CreditsScreen implements GameScreen {
         Label rightContent = UiFactory.label(
             """
                 Hyperion2400
-                Patrick Hand by Patrick Wagesreiter
-                Retro Energy by Universfield
-                Button Click by Universfield""",
+                craftpix.net
+                LuizMelo
+                Patrick Wagesreiter
+                Universfield
+                Universfield""",
             FontSize.SMALL
         );
 
@@ -65,8 +69,8 @@ public class CreditsScreen implements GameScreen {
 
         // HEADER
         table.top().left().defaults().left();
-        table.add(UiFactory.label("Credits", FontSize.LARGE)).width(400);
-        table.add().width(600);
+        table.add(UiFactory.label("Credits", FontSize.LARGE)).width(500);
+        table.add().width(500);
 
         // FILLER
         table.row();
@@ -74,7 +78,7 @@ public class CreditsScreen implements GameScreen {
 
         // CONTENT
         table.row();
-        table.add(leftContent).padLeft(100);
+        table.add(leftContent).padLeft(200);
         table.add(rightContent);
 
         // FILLER

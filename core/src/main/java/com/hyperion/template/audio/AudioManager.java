@@ -44,7 +44,7 @@ public class AudioManager {
 
     public static void setVolume(float volume) {
         if (music != null) {
-            music.setVolume(Math.max(volume * MAX_MUSIC_VOLUME, MAX_MUSIC_VOLUME));
+            music.setVolume(Math.min(volume * MAX_MUSIC_VOLUME, MAX_MUSIC_VOLUME));
         }
     }
 

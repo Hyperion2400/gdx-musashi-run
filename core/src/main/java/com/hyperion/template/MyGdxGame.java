@@ -14,7 +14,7 @@ import com.hyperion.template.settings.SettingsManager;
  */
 public class MyGdxGame extends Game {
 
-    public static final String TITLE = "MyGdxGame";
+    public static final String TITLE = "Musashi Run";
 
     public static final int WIDTH = 1280;
     public static final int HEIGHT = 720;

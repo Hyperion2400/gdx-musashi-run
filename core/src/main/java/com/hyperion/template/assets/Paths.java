@@ -8,6 +8,10 @@ public class Paths {
     public static final String CHECKBOX_OFF = "texture/checkbox_off.png";
     public static final String CHECKBOX_ON = "texture/checkbox_on.png";
 
+    public static final String WORLD_BACKGROUND = "texture/world_background.png";
+    public static final String WORLD_MAP = "texture/world_map.png";
+    public static final String WARRIOR_SPRITE_SHEET = "texture/martial hero/martial hero.atlas";
+
     public static final String MENU_MUSIC = "music/Universfield - Retro Energy.ogg";
 
     public static final String BUTTON_CLICK = "sound/Universfield - Button Click.ogg";
