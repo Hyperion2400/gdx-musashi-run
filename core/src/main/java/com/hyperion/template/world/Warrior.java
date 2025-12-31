@@ -6,13 +6,15 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.hyperion.template.assets.MyAssetManager;
-import com.hyperion.template.assets.Paths;
 
 public class Warrior extends Actor {
 
-    private static final int TILE_SIZE = 200;
+    private static final int TEXTURE_SIZE = 200;
     private static final int GRAVITY = 1000;
 
+    // positioning of the sprite within the texture
+    private final int offsetX;
+    private final int offsetY;
     private final int groundY;
 
     private float speedX;
@@ -24,8 +26,17 @@ public class Warrior extends Actor {
 
     private float animationTime = 0;
 
-    public Warrior(String spriteSheetPath, int x, int speedX, int groundY) {
+    public Warrior(
+        String spriteSheetPath,
+        int offsetX,
+        int offsetY,
+        int x,
+        int speedX,
+        int groundY
+    ) {
 
+        this.offsetX = offsetX;
+        this.offsetY = offsetY;
         setPosition(x, groundY);
         this.speedX = speedX;
         this.groundY = groundY;
@@ -34,7 +45,7 @@ public class Warrior extends Actor {
 
         TextureAtlas atlas = MyAssetManager.getTextureAtlas(spriteSheetPath);
 
-        TextureRegion[][] runRegions = atlas.findRegion("Run").split(TILE_SIZE, TILE_SIZE);
+        TextureRegion[][] runRegions = atlas.findRegion("Run").split(TEXTURE_SIZE, TEXTURE_SIZE);
 
         TextureRegion[] runFrames = new TextureRegion[runRegions.length * runRegions[0].length];
         int index = 0;
@@ -47,7 +58,7 @@ public class Warrior extends Actor {
 
         runAnimation = new Animation<>(0.1f, runFrames);
 
-        TextureRegion[][] jumpRegions = atlas.findRegion("Jump").split(TILE_SIZE, TILE_SIZE);
+        TextureRegion[][] jumpRegions = atlas.findRegion("Jump").split(TEXTURE_SIZE, TEXTURE_SIZE);
 
         TextureRegion[] jumpFrames = new TextureRegion[jumpRegions.length * jumpRegions[0].length];
         index = 0;
@@ -60,7 +71,7 @@ public class Warrior extends Actor {
 
         jumpAnimation = new Animation<>(0.1f, jumpFrames);
 
-        TextureRegion[][] fallRegions = atlas.findRegion("Fall").split(TILE_SIZE, TILE_SIZE);
+        TextureRegion[][] fallRegions = atlas.findRegion("Fall").split(TEXTURE_SIZE, TEXTURE_SIZE);
 
         TextureRegion[] fallFrames = new TextureRegion[fallRegions.length * fallRegions[0].length];
         index = 0;
@@ -95,9 +106,9 @@ public class Warrior extends Actor {
     public void draw(Batch batch, float parentAlpha) {
 
         // if speed is negative (running left) use negative width to flip texture
-        int width = speedX >= 0 ? TILE_SIZE : -TILE_SIZE;
-        float posX = (speedX >= 0 ? getX() : getX() + TILE_SIZE) - getOriginX();
-        float posY = getY() - getOriginY();
+        int width = speedX >= 0 ? TEXTURE_SIZE : -TEXTURE_SIZE;
+        float posX = (speedX >= 0 ? getX() : getX() + TEXTURE_SIZE) - offsetX;
+        float posY = getY() - offsetY;
 
         TextureRegion region;
 
@@ -109,7 +120,7 @@ public class Warrior extends Actor {
             region = fallAnimation.getKeyFrame(animationTime, true);
         }
 
-        batch.draw(region, posX, posY, width, TILE_SIZE);
+        batch.draw(region, posX, posY, width, TEXTURE_SIZE);
     }
 
     public void jump(float delta) {
@@ -128,4 +139,5 @@ public class Warrior extends Actor {
     public float getSpeedX() {
         return speedX;
     }
+
 }

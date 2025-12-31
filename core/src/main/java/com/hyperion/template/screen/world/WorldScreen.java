@@ -28,7 +28,7 @@ public class WorldScreen implements GameScreen {
     private final Stage stage = new Stage(new FitViewport(WORLD_WIDTH, WORLD_HEIGHT, cam));
 
     private final Warrior player =
-        new Warrior(Paths.WARRIOR_SPRITE_SHEET, PLAYER_OFFSET_X, START_SPEED, GROUND_Y);
+        new Warrior(Paths.WARRIOR_SPRITE_SHEET, 85, 78, PLAYER_OFFSET_X, START_SPEED, GROUND_Y);
 
     private final Warrior[] enemies = new Warrior[10];
     private int nextEnemyIndex = 0;
@@ -47,12 +47,9 @@ public class WorldScreen implements GameScreen {
         stage.addActor(player);
         stage.setDebugAll(true);
 
-        player.setOrigin(85, 78);
-
         for (int i = 0; i < enemies.length; i++) {
             // initialize pool of reusable enemy warriors to reduce object creations
-            enemies[i] = new Warrior(Paths.ENEMY_SPRITE_SHEET, 0, 0, GROUND_Y);
-            enemies[i].setOrigin(85, 72);
+            enemies[i] = new Warrior(Paths.ENEMY_SPRITE_SHEET, 85, 72, 0, 0, GROUND_Y);
         }
     }
 
