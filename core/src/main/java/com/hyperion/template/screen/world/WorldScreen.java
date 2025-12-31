@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.hyperion.template.assets.Paths;
@@ -18,7 +19,7 @@ public class WorldScreen implements GameScreen {
     private static final int WORLD_HEIGHT = 360;
     private static final int PLAYER_OFFSET_X = 128;
     private static final int GROUND_Y = 96;
-    private static final int START_SPEED = 200;
+    private static final int START_SPEED = 100;
 
     private final SpriteBatch batch = new SpriteBatch();
 
@@ -26,7 +27,13 @@ public class WorldScreen implements GameScreen {
 
     private final Stage stage = new Stage(new FitViewport(WORLD_WIDTH, WORLD_HEIGHT, cam));
 
-    private final Warrior player = new Warrior(PLAYER_OFFSET_X, START_SPEED, GROUND_Y, false);
+    private final Warrior player =
+        new Warrior(Paths.WARRIOR_SPRITE_SHEET, PLAYER_OFFSET_X, START_SPEED, GROUND_Y);
+
+    private final Warrior[] enemies = new Warrior[10];
+    private int nextEnemyIndex = 0;
+
+    private float nextEnemyCountDown = 1f;
 
     private final InfiniteBackground background =
         new InfiniteBackground(Paths.WORLD_BACKGROUND, GROUND_Y, WORLD_WIDTH);
@@ -38,37 +45,103 @@ public class WorldScreen implements GameScreen {
         stage.addActor(background);
         stage.addActor(ground);
         stage.addActor(player);
+        stage.setDebugAll(true);
+
+        player.setOrigin(85, 78);
+
+        for (int i = 0; i < enemies.length; i++) {
+            // initialize pool of reusable enemy warriors to reduce object creations
+            enemies[i] = new Warrior(Paths.ENEMY_SPRITE_SHEET, 0, 0, GROUND_Y);
+            enemies[i].setOrigin(85, 72);
+        }
     }
 
     @Override
     public void render(float delta) {
 
+        if (delta > 0.1f) {
+            delta = 0.1f;
+        }
+
         if (Gdx.input.isTouched()) {
             player.jump(delta);
         }
 
+        updateEnemies(delta);
+
         stage.act(delta);
 
-        float cameraLeft = player.getX() - PLAYER_OFFSET_X;
+        float viewPortLeft = viewPortLeft();
 
         // move background with half of player speed for parallax effect
         background.moveBy(player.getSpeedX() / 2 * delta, 0);
 
-        updateCamera(cameraLeft);
-        rearrangeBackgrounds(cameraLeft);
+        updateCamera(viewPortLeft);
+        rearrangeBackgrounds(viewPortLeft);
 
         stage.draw();
-
     }
 
-    private void updateCamera(float cameraLeft) {
-        cam.position.set(cameraLeft + WORLD_WIDTH / 2, WORLD_HEIGHT / 2, 0);
+    private void updateCamera(float viewPortLeft) {
+        cam.position.set(viewPortLeft + WORLD_WIDTH / 2, WORLD_HEIGHT / 2, 0);
         cam.update();
     }
 
     private void rearrangeBackgrounds(float cameraLeft) {
         background.rearrange(cameraLeft);
         ground.rearrange(cameraLeft);
+    }
+
+    private void updateEnemies(float delta) {
+
+        nextEnemyCountDown -= delta;
+
+        sendEnemy();
+
+        for (Warrior enemy : enemies) {
+            if (enemy.hasParent() && enemy.getRight() < viewPortLeft()) {
+                enemy.remove();
+            }
+        }
+    }
+
+    private void sendEnemy() {
+
+        if (nextEnemyCountDown > 0) {
+            return;
+        }
+
+        Warrior nextEnemy = enemies[nextEnemyIndex];
+
+        if (nextEnemy.hasParent()) {
+            // if enemy has a parent it's already on stage and not offscreen yet
+            return;
+        }
+
+        nextEnemy.setX(viewPortRight() + 100);
+        nextEnemy.setSpeedX(-START_SPEED);
+
+        stage.addActor(nextEnemy);
+
+        nextEnemyIndex++;
+
+        if (nextEnemyIndex > enemies.length - 1) {
+            nextEnemyIndex = 0;
+        }
+
+        resetEnemyCountDown();
+    }
+
+    private float viewPortLeft() {
+        return player.getX() - PLAYER_OFFSET_X;
+    }
+
+    private float viewPortRight() {
+        return player.getX() - PLAYER_OFFSET_X + WORLD_WIDTH;
+    }
+
+    private void resetEnemyCountDown() {
+        nextEnemyCountDown = MathUtils.random(0.3f, 2f);
     }
 
     @Override

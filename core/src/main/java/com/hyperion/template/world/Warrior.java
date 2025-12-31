@@ -13,7 +13,7 @@ public class Warrior extends Actor {
     private static final int TILE_SIZE = 200;
     private static final int GRAVITY = 1000;
 
-    private final int floorY;
+    private final int groundY;
 
     private float speedX;
     private float speedY = 0;
@@ -24,15 +24,15 @@ public class Warrior extends Actor {
 
     private float animationTime = 0;
 
-    public Warrior(int x, int speedX, int floorY, boolean flip) {
+    public Warrior(String spriteSheetPath, int x, int speedX, int groundY) {
 
-        setPosition(x, floorY);
+        setPosition(x, groundY);
         this.speedX = speedX;
-        this.floorY = floorY;
+        this.groundY = groundY;
 
-        setOrigin(80, 78);
+        setSize(30, 50);
 
-        TextureAtlas atlas = MyAssetManager.getTextureAtlas(Paths.WARRIOR_SPRITE_SHEET);
+        TextureAtlas atlas = MyAssetManager.getTextureAtlas(spriteSheetPath);
 
         TextureRegion[][] runRegions = atlas.findRegion("Run").split(TILE_SIZE, TILE_SIZE);
 
@@ -83,47 +83,39 @@ public class Warrior extends Actor {
 
         moveBy(speedX * delta, speedY * delta);
 
-        if (getY() > floorY) {
+        if (getY() > groundY) {
             speedY -= GRAVITY * delta;
-        } else if (getY() < floorY) {
+        } else if (getY() < groundY) {
             speedY = 0;
-            setY(floorY);
+            setY(groundY);
         }
     }
 
     @Override
     public void draw(Batch batch, float parentAlpha) {
-        if (getY() == floorY) {
-            batch.draw(
-                runAnimation.getKeyFrame(animationTime, true),
-                (getX() - getOriginX()),
-                (getY() - getOriginY()),
-                TILE_SIZE,
-                TILE_SIZE
-            );
+
+        // if speed is negative (running left) use negative width to flip texture
+        int width = speedX >= 0 ? TILE_SIZE : -TILE_SIZE;
+        float posX = (speedX >= 0 ? getX() : getX() + TILE_SIZE) - getOriginX();
+        float posY = getY() - getOriginY();
+
+        TextureRegion region;
+
+        if (getY() == groundY) {
+            region = runAnimation.getKeyFrame(animationTime, true);
         } else if (speedY > 0) {
-            batch.draw(
-                jumpAnimation.getKeyFrame(animationTime, true),
-                (getX() - getOriginX()),
-                (getY() - getOriginY()),
-                TILE_SIZE * getScaleX(),
-                TILE_SIZE * getScaleY()
-            );
+            region = jumpAnimation.getKeyFrame(animationTime, true);
         } else {
-            batch.draw(
-                fallAnimation.getKeyFrame(animationTime, true),
-                (getX() - getOriginX()),
-                (getY() - getOriginY()),
-                TILE_SIZE,
-                TILE_SIZE
-            );
+            region = fallAnimation.getKeyFrame(animationTime, true);
         }
+
+        batch.draw(region, posX, posY, width, TILE_SIZE);
     }
 
     public void jump(float delta) {
-        if (getY() == floorY) {
+        if (getY() == groundY) {
             speedY = 350;
-        } else if (getY() > floorY) {
+        } else if (getY() > groundY) {
             // touching longer prolongs jump
             speedY += GRAVITY / 2 * delta;
         }

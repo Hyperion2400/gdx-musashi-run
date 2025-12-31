@@ -1,0 +1,19 @@
+martial hero 2.png
+size:2048,1024
+repeat:none
+Attack1
+bounds:2,204,800,200
+Attack2
+bounds:2,406,800,200
+Death
+bounds:2,608,1400,200
+Fall
+bounds:1404,608,400,200
+Idle
+bounds:2,2,800,200
+Jump
+bounds:1604,810,400,200
+Run
+bounds:2,810,1600,200
+Take hit
+bounds:804,406,600,200

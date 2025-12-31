@@ -32,7 +32,8 @@ public class MyAssetManager {
     );
 
     private static final List<String> textureAtlasFiles = List.of(
-        Paths.WARRIOR_SPRITE_SHEET
+        Paths.WARRIOR_SPRITE_SHEET,
+        Paths.ENEMY_SPRITE_SHEET
     );
 
     private static final List<String> musicFiles = List.of(
