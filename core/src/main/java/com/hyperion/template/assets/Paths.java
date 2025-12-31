@@ -10,8 +10,7 @@ public class Paths {
 
     public static final String WORLD_BACKGROUND = "texture/world_background.png";
     public static final String WORLD_MAP = "texture/world_map.png";
-    public static final String WARRIOR_SPRITE_SHEET = "texture/sprite sheets/martial hero.atlas";
-    public static final String ENEMY_SPRITE_SHEET = "texture/sprite sheets/martial hero 2.atlas";
+    public static final String SPRITE_SHEET = "texture/sprite_sheet/martial_hero.atlas";
 
     public static final String MENU_MUSIC = "music/Universfield - Retro Energy.ogg";
 

@@ -23,8 +23,7 @@ public class MyAssetManager {
 
         loadTextures();
 
-        assetManager.load(Paths.WARRIOR_SPRITE_SHEET, TextureAtlas.class);
-        assetManager.load(Paths.ENEMY_SPRITE_SHEET, TextureAtlas.class);
+        assetManager.load(Paths.SPRITE_SHEET, TextureAtlas.class);
 
         loadFont();
 
