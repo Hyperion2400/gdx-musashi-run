@@ -41,7 +41,7 @@ public class Warrior extends Actor {
         this.speedX = speedX;
         this.groundY = groundY;
 
-        setSize(30, 50);
+        setSize(30, 48);
 
         TextureAtlas atlas = MyAssetManager.getTextureAtlas(spriteSheetPath);
 

@@ -2,47 +2,19 @@ package com.hyperion.template.assets;
 
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.assets.loaders.BitmapFontLoader;
-import com.badlogic.gdx.assets.loaders.FileHandleResolver;
 import com.badlogic.gdx.assets.loaders.TextureLoader;
-import com.badlogic.gdx.assets.loaders.resolvers.InternalFileHandleResolver;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 
-import java.util.List;
-
 /**
  * Wraps AssetManager and loads assets.
  */
 public class MyAssetManager {
 
-    // font size of the bitmap font. used for scaling calculations.
-    public static final int BITMAP_FONT_SIZE = 64;
-
     private static final AssetManager assetManager = new AssetManager();
-
-    private static final List<String> textureFiles = List.of(
-        Paths.MENU_BACKGROUND,
-        Paths.CHECKBOX_OFF,
-        Paths.CHECKBOX_ON,
-        Paths.WORLD_BACKGROUND,
-        Paths.WORLD_MAP
-    );
-
-    private static final List<String> textureAtlasFiles = List.of(
-        Paths.WARRIOR_SPRITE_SHEET,
-        Paths.ENEMY_SPRITE_SHEET
-    );
-
-    private static final List<String> musicFiles = List.of(
-        Paths.MENU_MUSIC
-    );
-
-    private static final List<String> soundFiles = List.of(
-        Paths.BUTTON_CLICK
-    );
 
     private MyAssetManager() {
     }
@@ -51,40 +23,40 @@ public class MyAssetManager {
 
         loadTextures();
 
-        textureAtlasFiles.forEach(path -> assetManager.load(path, TextureAtlas.class));
+        assetManager.load(Paths.WARRIOR_SPRITE_SHEET, TextureAtlas.class);
+        assetManager.load(Paths.ENEMY_SPRITE_SHEET, TextureAtlas.class);
 
-        loadFonts();
+        loadFont();
 
-        musicFiles.forEach(path -> assetManager.load(path, Music.class));
-        soundFiles.forEach(path -> assetManager.load(path, Sound.class));
+        assetManager.load(Paths.MENU_MUSIC, Music.class);
+        assetManager.load(Paths.BUTTON_CLICK, Sound.class);
 
         assetManager.finishLoading();
     }
 
     private static void loadTextures() {
-        var textureParams = new TextureLoader.TextureParameter();
-        // we don't want TextureFilter.Linear here because it makes the pixel art blurry.
-        // but if you don't use pixel art you might want to use this to avoid scaling artifacts.
-        // textureParams.minFilter = Texture.TextureFilter.Linear;
-        // textureParams.magFilter = Texture.TextureFilter.Linear;
-        textureFiles.forEach(path -> assetManager.load(path, Texture.class, textureParams));
+
+        assetManager.load(Paths.MENU_BACKGROUND, Texture.class);
+        assetManager.load(Paths.WORLD_BACKGROUND, Texture.class);
+        assetManager.load(Paths.WORLD_MAP, Texture.class);
+
+        // use TextureFilter.Linear to reduce scaling artifacts but not for pixel art
+        var parameter = new TextureLoader.TextureParameter();
+        parameter.minFilter = Texture.TextureFilter.Linear;
+        parameter.magFilter = Texture.TextureFilter.Linear;
+
+        assetManager.load(Paths.CHECKBOX_OFF, Texture.class, parameter);
+        assetManager.load(Paths.CHECKBOX_ON, Texture.class, parameter);
     }
 
-    private static void loadFonts() {
-        // set the loaders for the generator and the fonts themselves
-        FileHandleResolver resolver = new InternalFileHandleResolver();
-        assetManager.setLoader(BitmapFont.class, ".fnt", new BitmapFontLoader(resolver));
-
-        assetManager.load(Paths.FONT, BitmapFont.class, fontParams());
-    }
-
-    private static BitmapFontLoader.BitmapFontParameter fontParams() {
+    private static void loadFont() {
         BitmapFontLoader.BitmapFontParameter parameter = new BitmapFontLoader.BitmapFontParameter();
         // prevents pixelation when scaling down
         parameter.minFilter = Texture.TextureFilter.Linear;
         // prevents pixelation when scaling up
         parameter.magFilter = Texture.TextureFilter.Linear;
-        return parameter;
+
+        assetManager.load(Paths.FONT, BitmapFont.class, parameter);
     }
 
     public static Texture getTexture(String path) {

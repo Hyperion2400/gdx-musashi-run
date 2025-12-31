@@ -12,6 +12,9 @@ import com.hyperion.template.audio.AudioManager;
 
 public class UiFactory {
 
+    // font size of the bitmap font. used for scaling calculations.
+    private static final int BITMAP_FONT_SIZE = 64;
+
     private static final Label.LabelStyle labelStyle = new Label.LabelStyle();
     private static final TextButton.TextButtonStyle buttonStyle = new TextButton.TextButtonStyle();
     private static final CheckBox.CheckBoxStyle checkBoxStyle = new CheckBox.CheckBoxStyle();
@@ -53,7 +56,7 @@ public class UiFactory {
 
         if (fontSize.scale != 1) {
             label.setFontScale(fontSize.scale);
-            label.setHeight(fontSize.scale * MyAssetManager.BITMAP_FONT_SIZE);
+            label.setHeight(fontSize.scale * BITMAP_FONT_SIZE);
         }
 
         return label;
