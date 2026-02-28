@@ -28,7 +28,17 @@ public class WorldScreen implements GameScreen {
     private final Stage stage = new Stage(new FitViewport(WORLD_WIDTH, WORLD_HEIGHT, cam));
 
     private final Warrior player =
-        new Warrior(Warrior.MARTIAL_HERO_1, 88, PLAYER_OFFSET_X, START_SPEED, GROUND_Y);
+        new Warrior(
+            Warrior.MARTIAL_HERO_1,
+            88,
+            PLAYER_OFFSET_X,
+            START_SPEED,
+            1,
+            GROUND_Y,
+            3,
+            60,
+            4
+        );
 
     private final Warrior[] enemies = new Warrior[10];
     private int nextEnemyIndex = 0;
@@ -45,11 +55,21 @@ public class WorldScreen implements GameScreen {
         stage.addActor(background);
         stage.addActor(ground);
         stage.addActor(player);
-        stage.setDebugAll(true);
+        //stage.setDebugAll(true);
 
         for (int i = 0; i < enemies.length; i++) {
             // initialize pool of reusable enemy warriors to reduce object creations
-            enemies[i] = new Warrior(Warrior.MARTIAL_HERO_2, 85, 0, 0, GROUND_Y);
+            enemies[i] = new Warrior(
+                Warrior.MARTIAL_HERO_2,
+                85,
+                0,
+                START_SPEED,
+                -1,
+                GROUND_Y,
+                1,
+                50,
+                2
+            );
         }
     }
 
@@ -59,6 +79,8 @@ public class WorldScreen implements GameScreen {
         if (delta > 0.1f) {
             delta = 0.1f;
         }
+
+        checkCollision(delta);
 
         if (Gdx.input.isTouched()) {
             player.jump(delta);
@@ -72,10 +94,9 @@ public class WorldScreen implements GameScreen {
 
         // move background with half of player speed for parallax effect
         background.moveBy(player.getSpeedX() / 2 * delta, 0);
-
-        updateCamera(viewPortLeft);
         rearrangeBackgrounds(viewPortLeft);
 
+        updateCamera(viewPortLeft);
         stage.draw();
     }
 
@@ -89,11 +110,42 @@ public class WorldScreen implements GameScreen {
         ground.rearrange(cameraLeft);
     }
 
+    private void checkCollision(float delta) {
+
+        if (player.isDead()) {
+            return;
+        }
+
+        for (int i = 0; i < enemies.length; i++) {
+
+            if (enemies[i].isDead()) {
+                continue;
+            }
+
+            if (!player.isAttacking() && player.getStartAttackBox(delta)
+                .overlaps(enemies[i].getBounds())) {
+                player.attack();
+            }
+
+            if (!player.isAttacking()
+                && !enemies[i].isAttacking()
+                && enemies[i].getStartAttackBox(delta).overlaps(player.getBounds())) {
+                enemies[i].attack();
+            }
+
+            if (player.isHitFrame() && player.getAttackBox().overlaps(enemies[i].getBounds())) {
+                enemies[i].takeHit();
+            } else if (enemies[i].isHitFrame() && enemies[i].getAttackBox().overlaps(player.getBounds())) {
+                player.takeHit();
+            }
+        }
+    }
+
     private void updateEnemies(float delta) {
 
         nextEnemyCountDown -= delta;
 
-        sendEnemy();
+        spawnEnemy();
 
         for (Warrior enemy : enemies) {
             if (enemy.hasParent() && enemy.getRight() < viewPortLeft()) {
@@ -102,7 +154,7 @@ public class WorldScreen implements GameScreen {
         }
     }
 
-    private void sendEnemy() {
+    private void spawnEnemy() {
 
         if (nextEnemyCountDown > 0) {
             return;
@@ -116,7 +168,7 @@ public class WorldScreen implements GameScreen {
         }
 
         nextEnemy.setX(viewPortRight() + 100);
-        nextEnemy.setSpeedX(-START_SPEED);
+        nextEnemy.reset();
 
         stage.addActor(nextEnemy);
 
