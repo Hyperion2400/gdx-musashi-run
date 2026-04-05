@@ -27,18 +27,17 @@ public class PlayScreen implements GameScreen {
 
     private final Stage stage = new Stage(new FitViewport(WORLD_WIDTH, WORLD_HEIGHT, cam));
 
-    private final Warrior player =
-        new Warrior(
-            Warrior.MARTIAL_HERO_1,
-            88,
-            PLAYER_OFFSET_X,
-            START_SPEED,
-            1,
-            GROUND_Y,
-            3,
-            60,
-            4
-        );
+    private final Warrior player = new Warrior(
+        Warrior.MARTIAL_HERO_1,
+        88,
+        PLAYER_OFFSET_X,
+        START_SPEED,
+        1,
+        GROUND_Y,
+        3,
+        60,
+        4
+    );
 
     private final Warrior[] enemies = new Warrior[10];
     private int nextEnemyIndex = 0;
@@ -80,13 +79,13 @@ public class PlayScreen implements GameScreen {
             delta = 0.1f;
         }
 
-        checkCollision(delta);
 
         if (Gdx.input.isTouched()) {
             player.jump(delta);
         }
 
-        updateEnemies(delta);
+        triggerEnemyAttacks(delta);
+        respawnEnemies(delta);
 
         stage.act(delta);
 
@@ -110,38 +109,32 @@ public class PlayScreen implements GameScreen {
         ground.rearrange(cameraLeft);
     }
 
-    private void checkCollision(float delta) {
+    private void triggerEnemyAttacks(float delta) {
 
         if (player.isDead()) {
             return;
         }
 
-        for (int i = 0; i < enemies.length; i++) {
+        for (Warrior enemy : enemies) {
 
-            if (enemies[i].isDead()) {
+            if (enemy.isDead()) {
                 continue;
             }
 
-            if (!player.isAttacking() && player.getStartAttackBox(delta)
-                .overlaps(enemies[i].getBounds())) {
-                player.attack();
+            if (!enemy.isAttacking()
+                && enemy.getStartAttackBox(delta).overlaps(player.getBounds())) {
+                enemy.attack();
             }
 
-            if (!player.isAttacking()
-                && !enemies[i].isAttacking()
-                && enemies[i].getStartAttackBox(delta).overlaps(player.getBounds())) {
-                enemies[i].attack();
-            }
-
-            if (player.isHitFrame() && player.getAttackBox().overlaps(enemies[i].getBounds())) {
-                enemies[i].takeHit();
-            } else if (enemies[i].isHitFrame() && enemies[i].getAttackBox().overlaps(player.getBounds())) {
+            if (enemy.isHitFrame() && !enemy.isDamagedDealt() && enemy.getAttackBox()
+                .overlaps(player.getBounds())) {
                 player.takeHit();
+                enemy.dealDamage();
             }
         }
     }
 
-    private void updateEnemies(float delta) {
+    private void respawnEnemies(float delta) {
 
         nextEnemyCountDown -= delta;
 

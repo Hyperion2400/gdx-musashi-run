@@ -32,19 +32,18 @@ public class Warrior extends Actor {
     private final int attackRange;
     private final int maxHealth;
     private final int direction; // 1 if right, -1 if left
-    private final int hitFrame;
+    private final int hitFrame; // the frame of the animation that represents the hit
 
     private final Rectangle attackBox = new Rectangle();
-    private final Rectangle hitBox = new Rectangle();
 
-    private float maxSpeedX;
+    private final float maxSpeedX;
     private float speedX;
     private float speedY = 0;
     private float animationTime = 0;
     private boolean isAttacking = false;
+    private boolean damagedDealt = false; // whether current attack has already dealth damage
     private boolean isDead = false;
     private int health;
-    private int energy = 3;
 
     public Warrior(
         String character,
@@ -73,17 +72,18 @@ public class Warrior extends Actor {
 
         TextureAtlas atlas = MyAssetManager.getTextureAtlas(Paths.SPRITE_SHEET);
 
-        runAnimation = createAnimation(atlas, character, "run");
-        jumpAnimation = createAnimation(atlas, character, "jump");
-        fallAnimation = createAnimation(atlas, character, "fall");
-        attackAnimation = createAnimation(atlas, character, "attack1");
-        deathAnimation = createAnimation(atlas, character, "death");
+        runAnimation = createAnimation(atlas, character, "run", Animation.PlayMode.LOOP);
+        jumpAnimation = createAnimation(atlas, character, "jump", Animation.PlayMode.LOOP);
+        fallAnimation = createAnimation(atlas, character, "fall", Animation.PlayMode.LOOP);
+        attackAnimation = createAnimation(atlas, character, "attack1", Animation.PlayMode.NORMAL);
+        deathAnimation = createAnimation(atlas, character, "death", Animation.PlayMode.NORMAL);
     }
 
     private Animation<TextureRegion> createAnimation(
         TextureAtlas atlas,
         String character,
-        String animation
+        String animation,
+        Animation.PlayMode playMode
     ) {
 
         TextureRegion region = atlas.findRegion(character + "_" + animation);
@@ -93,7 +93,9 @@ public class Warrior extends Actor {
         // otherwise we'd have to iterate through the two-dimensional array to pick all frames
         TextureRegion[] frames = splitRegions[0];
 
-        return new Animation<>(0.1f, frames);
+        var anim = new Animation<>(0.1f, frames);
+        anim.setPlayMode(playMode);
+        return anim;
     }
 
     @Override
@@ -126,15 +128,15 @@ public class Warrior extends Actor {
         TextureRegion region;
 
         if (isDead) {
-            region = deathAnimation.getKeyFrame(animationTime, false);
+            region = deathAnimation.getKeyFrame(animationTime);
         } else if (isAttacking) {
-            region = attackAnimation.getKeyFrame(animationTime, false);
+            region = attackAnimation.getKeyFrame(animationTime);
         } else if (getY() == groundY) {
-            region = runAnimation.getKeyFrame(animationTime, true);
+            region = runAnimation.getKeyFrame(animationTime);
         } else if (speedY > 0) {
-            region = jumpAnimation.getKeyFrame(animationTime, true);
+            region = jumpAnimation.getKeyFrame(animationTime);
         } else {
-            region = fallAnimation.getKeyFrame(animationTime, true);
+            region = fallAnimation.getKeyFrame(animationTime);
         }
 
         batch.draw(region, posX, getY(), direction * REGION_WIDTH, region.getRegionHeight());
@@ -175,13 +177,12 @@ public class Warrior extends Actor {
     public void attack() {
 
 
-        if (getY() > groundY || isAttacking || energy <= 0) {
+        if (getY() > groundY || isAttacking) {
             return;
         }
 
         animationTime = 0;
         isAttacking = true;
-        energy --;
     }
 
     public void takeHit() {
@@ -191,6 +192,10 @@ public class Warrior extends Actor {
         if (health <= 0) {
             die();
         }
+    }
+
+    public void dealDamage() {
+        damagedDealt = true;
     }
 
     private void die() {
@@ -209,8 +214,8 @@ public class Warrior extends Actor {
         animationTime = 0;
         isDead = false;
         isAttacking = false;
+        damagedDealt = false;
         health = maxHealth;
-        energy = 3;
     }
 
     public float getSpeedX() {
@@ -221,6 +226,9 @@ public class Warrior extends Actor {
         return new Rectangle(getX(), getY(), getWidth(), getHeight());
     }
 
+    /**
+     * The bounds in which a target is considered to be hit if an attack occurs.
+     */
     public Rectangle getAttackBox() {
         if (direction == 1) {
             attackBox.x = getRight();
@@ -235,9 +243,12 @@ public class Warrior extends Actor {
         return attackBox;
     }
 
+    /**
+     * The bounds in which an attack should be started to hit a moving target.
+     */
     public Rectangle getStartAttackBox(float delta) {
 
-        int speedOffset = (int) (20 * speedX * delta); // anticipate movement
+        int speedOffset = (int) (30 * speedX * delta); // anticipate movement
 
         if (direction == 1) {
             attackBox.x = getRight() + speedOffset;
@@ -252,12 +263,21 @@ public class Warrior extends Actor {
         return attackBox;
     }
 
+    public boolean isHitFrame() {
+        var hitFrameStartTime = hitFrame * attackAnimation.getFrameDuration();
+        var hitFrameEndTime = (hitFrame + 1) * attackAnimation.getFrameDuration();
+
+        return isAttacking
+            && animationTime >= hitFrameStartTime
+            && animationTime < hitFrameEndTime;
+    }
+
     public boolean isAttacking() {
         return isAttacking;
     }
 
-    public boolean isHitFrame() {
-        return isAttacking && animationTime >= hitFrame * attackAnimation.getFrameDuration() && animationTime < (hitFrame + 1) * attackAnimation.getFrameDuration();
+    public boolean isDamagedDealt() {
+        return damagedDealt;
     }
 
     public boolean isDead() {
