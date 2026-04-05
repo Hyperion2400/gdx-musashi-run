@@ -1,4 +1,4 @@
-package com.hyperion.template.screen.world;
+package com.hyperion.template.screen.play;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Camera;
@@ -13,7 +13,7 @@ import com.hyperion.template.screen.GameScreen;
 import com.hyperion.template.world.InfiniteBackground;
 import com.hyperion.template.world.Warrior;
 
-public class WorldScreen implements GameScreen {
+public class PlayScreen implements GameScreen {
 
     private static final int WORLD_WIDTH = 640;
     private static final int WORLD_HEIGHT = 360;
@@ -51,7 +51,7 @@ public class WorldScreen implements GameScreen {
     private final InfiniteBackground ground =
         new InfiniteBackground(Paths.WORLD_MAP, 0, WORLD_WIDTH);
 
-    public WorldScreen() {
+    public PlayScreen() {
         stage.addActor(background);
         stage.addActor(ground);
         stage.addActor(player);
