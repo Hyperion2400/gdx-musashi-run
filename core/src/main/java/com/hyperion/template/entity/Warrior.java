@@ -1,4 +1,4 @@
-package com.hyperion.template.world;
+package com.hyperion.template.entity;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Animation;
