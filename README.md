@@ -6,7 +6,8 @@ your project.
 It's mainly for beginners and game jam participants, since serious projects will probably target more
 platforms than the ones provided here and will need to change the setup.
 
-This project was generated with [gdx-liftoff](https://github.com/libgdx/gdx-liftoff).
+This project was generated with [gdx-liftoff](https://github.com/libgdx/gdx-liftoff). I recommend doing your project
+setup with gdx-liftoff and only copying and pasting what you need out of the core module.
 
 ## Platforms
 

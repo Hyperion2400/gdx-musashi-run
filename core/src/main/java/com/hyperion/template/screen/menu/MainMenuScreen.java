@@ -1,5 +1,6 @@
 package com.hyperion.template.screen.menu;
 
+import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -61,8 +62,11 @@ public class MainMenuScreen implements GameScreen {
         table.add(settingsButton);
         table.row();
         table.add(creditsButton);
-        table.row();
-        table.add(quitButton);
+
+        if (Gdx.app.getType() != Application.ApplicationType.WebGL) {
+            table.row();
+            table.add(quitButton);
+        }
 
         Image menuBackgroundImg = UiFactory.menuBackground();
 

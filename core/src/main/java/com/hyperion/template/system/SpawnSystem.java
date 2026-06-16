@@ -8,7 +8,7 @@ public class SpawnSystem {
 
     private final Stage stage;
 
-    private float timeTillNextEnemy = 1f;
+    private float timeTillNextEnemy = 1.2f;
     private int nextEnemyIndex = 0;
 
     public SpawnSystem(Stage stage) {

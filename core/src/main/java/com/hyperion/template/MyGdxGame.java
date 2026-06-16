@@ -19,7 +19,7 @@ public class MyGdxGame extends Game {
     public static final int WIDTH = 1280;
     public static final int HEIGHT = 720;
 
-    private static String version;
+    private static String version = "";
 
     @Override
     public void create() {
@@ -39,13 +39,13 @@ public class MyGdxGame extends Game {
         // needs project_version file to be created in build.gradle
         if (Gdx.files.internal("project_version").exists()) {
             version = Gdx.files.internal("project_version").readString();
-            Gdx.graphics.setTitle(TITLE + " " + version);
         }
     }
 
     @Override
     public void render() {
 
+        Gdx.graphics.setTitle(TITLE + " " + version + " (" + Gdx.graphics.getFramesPerSecond() + " fps)");
         ScreenUtils.clear(Color.BLACK);
 
         super.render();
