@@ -57,7 +57,8 @@ public class PlayScreen implements GameScreen {
         worldStage.addActor(background);
         worldStage.addActor(ground);
         worldStage.addActor(player);
-        worldStage.addActor(hintLabel());
+        worldStage.addActor(hintLabel1());
+        worldStage.addActor(hintLabel2());
 
         uiStage.addActor(scoreLabel);
 
@@ -74,9 +75,19 @@ public class PlayScreen implements GameScreen {
         return label;
     }
 
-    private Label hintLabel() {
+    private Label hintLabel1() {
         Label label = UiFactory.label("Tap to jump. Hold to jump higher.", FontSize.SMALL);
         label.setPosition(WORLD_WIDTH / 2f, 32);
+        label.getColor().a = 0.8f;
+        return label;
+    }
+
+    private Label hintLabel2() {
+        Label label = UiFactory.label(
+            "You can touch enemies, but avoid their blades.",
+            FontSize.SMALL
+        );
+        label.setPosition(3 * WORLD_WIDTH, 32);
         label.getColor().a = 0.8f;
         return label;
     }
@@ -132,12 +143,12 @@ public class PlayScreen implements GameScreen {
 
     private void updateDifficulty() {
         if (score < 100) {
-            player.setSpeedX(START_SPEED);
+            player.setSpeedX(START_SPEED); // start speed
         } else if (score > 100 && score < 400) {
             float progressionFactor = score / 100 * 0.25f; // add 25% speed every 100 points
             player.setSpeedX(START_SPEED * (1 + progressionFactor));
         } else if (score > 400) {
-            player.setSpeedX(START_SPEED * 2f);
+            player.setSpeedX(START_SPEED * 2f); // terminal speed
         }
     }
 

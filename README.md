@@ -51,3 +51,9 @@ Useful Gradle tasks and flags:
 Note that most tasks that are not specific to a single project can be run with `name:` prefix, where the `name` should
 be replaced with the ID of a specific project.
 For example, `core:clean` removes `build` folder only from the `core` project.
+
+## Texture Atlas
+
+The texture atlas for the martial hero sprites has been created using [gdx-texture-packer-gui](https://github.com/crashinvaders/gdx-texture-packer-gui).
+
+See here for more info: https://libgdx.com/wiki/tools/texture-packer#texturepacker.
