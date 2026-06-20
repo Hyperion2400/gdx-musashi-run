@@ -27,8 +27,7 @@ public class MyAssetManager {
 
         loadFont();
 
-        assetManager.load(Paths.MENU_MUSIC, Music.class);
-        assetManager.load(Paths.BUTTON_CLICK, Sound.class);
+        loadAudio();
 
         assetManager.finishLoading();
     }
@@ -56,6 +55,12 @@ public class MyAssetManager {
         parameter.magFilter = Texture.TextureFilter.Linear;
 
         assetManager.load(Paths.FONT, BitmapFont.class, parameter);
+    }
+
+    private static void loadAudio() {
+        assetManager.load(Paths.MENU_MUSIC, Music.class);
+        assetManager.load(Paths.BUTTON_CLICK, Sound.class);
+        assetManager.load(Paths.SWORD_SLASH, Sound.class);
     }
 
     public static Texture getTexture(String path) {

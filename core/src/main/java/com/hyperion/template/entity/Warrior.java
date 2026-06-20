@@ -10,6 +10,7 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.hyperion.template.assets.MyAssetManager;
 import com.hyperion.template.assets.Paths;
+import com.hyperion.template.audio.AudioManager;
 
 public class Warrior extends Actor {
 
@@ -36,7 +37,7 @@ public class Warrior extends Actor {
 
     private final Rectangle attackBox = new Rectangle();
 
-    private final float maxSpeedX;
+    private float maxSpeedX;
     private float speedX;
     private float speedY = 0;
     private float animationTime = 0;
@@ -183,6 +184,7 @@ public class Warrior extends Actor {
 
         animationTime = 0;
         isAttacking = true;
+        AudioManager.playSound(Paths.SWORD_SLASH);
     }
 
     public void takeHit() {
@@ -220,6 +222,11 @@ public class Warrior extends Actor {
 
     public float getSpeedX() {
         return speedX;
+    }
+
+    public void setSpeedX(float newSpeedX) {
+        maxSpeedX = newSpeedX;
+        speedX = maxSpeedX;
     }
 
     public Rectangle getBounds() {

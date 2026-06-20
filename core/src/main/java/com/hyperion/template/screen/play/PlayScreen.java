@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.utils.TimeUtils;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.hyperion.template.assets.Paths;
@@ -14,6 +15,8 @@ import com.hyperion.template.screen.ScreenManager;
 import com.hyperion.template.screen.menu.MainMenuScreen;
 import com.hyperion.template.system.ActionSystem;
 import com.hyperion.template.system.SpawnSystem;
+import com.hyperion.template.ui.FontSize;
+import com.hyperion.template.ui.UiFactory;
 import com.hyperion.template.world.InfiniteBackground;
 
 public class PlayScreen implements GameScreen {
@@ -28,10 +31,13 @@ public class PlayScreen implements GameScreen {
 
     private final Camera cam = new OrthographicCamera();
 
-    private final Stage stage = new Stage(new FitViewport(WORLD_WIDTH, WORLD_HEIGHT, cam));
+    private final Label scoreLabel = scoreLabel();
+    private final Stage worldStage = new Stage(new FitViewport(WORLD_WIDTH, WORLD_HEIGHT, cam));
+    private final Stage uiStage =
+        new Stage(new FitViewport(WORLD_WIDTH, WORLD_HEIGHT, new OrthographicCamera()));
 
     private final ActionSystem actionSystem = new ActionSystem();
-    private final SpawnSystem spawnSystem = new SpawnSystem(stage);
+    private final SpawnSystem spawnSystem = new SpawnSystem(worldStage);
 
     private final Warrior player = new Warrior(
         Warrior.MARTIAL_HERO_1, 88, PLAYER_OFFSET_X, START_SPEED, 1, GROUND_Y, 1, 60, 4);
@@ -44,18 +50,35 @@ public class PlayScreen implements GameScreen {
     private final InfiniteBackground ground =
         new InfiniteBackground(Paths.WORLD_MAP, 0, WORLD_WIDTH);
 
+    private long score;
     private long deathTimestamp = 0; // used to measure time before going back to main menu after death
 
     public PlayScreen() {
-        stage.addActor(background);
-        stage.addActor(ground);
-        stage.addActor(player);
+        worldStage.addActor(background);
+        worldStage.addActor(ground);
+        worldStage.addActor(player);
+        worldStage.addActor(hintLabel());
+
+        uiStage.addActor(scoreLabel);
 
         for (int i = 0; i < enemies.length; i++) {
             // initialize pool of reusable enemy warriors to reduce object creations
             enemies[i] = new Warrior(
                 Warrior.MARTIAL_HERO_2, 85, 0, START_SPEED, -1, GROUND_Y, 1, 50, 2);
         }
+    }
+
+    private Label scoreLabel() {
+        Label label = UiFactory.label("0", FontSize.SMALL);
+        label.setPosition(16, WORLD_HEIGHT - 40);
+        return label;
+    }
+
+    private Label hintLabel() {
+        Label label = UiFactory.label("Tap to jump. Hold to jump higher.", FontSize.SMALL);
+        label.setPosition(WORLD_WIDTH / 2f, 32);
+        label.getColor().a = 0.8f;
+        return label;
     }
 
     @Override
@@ -66,6 +89,9 @@ public class PlayScreen implements GameScreen {
         }
 
         if (!player.isDead()) {
+
+            updateScore();
+            updateDifficulty();
 
             actionSystem.update(delta, player, enemies);
 
@@ -80,11 +106,12 @@ public class PlayScreen implements GameScreen {
 
         updatePositions(delta);
 
-        stage.draw();
+        worldStage.draw();
+        uiStage.draw();
     }
 
     private void updatePositions(float delta) {
-        stage.act(delta);
+        worldStage.act(delta);
 
         float viewPortLeft = viewPortLeft();
 
@@ -96,6 +123,22 @@ public class PlayScreen implements GameScreen {
 
         spawnSystem.update(delta, enemies, viewPortLeft, viewPortRight());
         updateCamera(viewPortLeft);
+    }
+
+    private void updateScore() {
+        score = (long) (player.getX() - PLAYER_OFFSET_X) / 10; // just based on player position
+        scoreLabel.setText(String.valueOf(score));
+    }
+
+    private void updateDifficulty() {
+        if (score < 100) {
+            player.setSpeedX(START_SPEED);
+        } else if (score > 100 && score < 400) {
+            float progressionFactor = score / 100 * 0.25f; // add 25% speed every 100 points
+            player.setSpeedX(START_SPEED * (1 + progressionFactor));
+        } else if (score > 400) {
+            player.setSpeedX(START_SPEED * 2f);
+        }
     }
 
     private float viewPortLeft() {

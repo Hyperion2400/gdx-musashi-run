@@ -60,6 +60,6 @@ public class SpawnSystem {
     }
 
     private void resetTimeTillNextEnemy() {
-        timeTillNextEnemy = MathUtils.random(0.3f, 2f);
+        timeTillNextEnemy = MathUtils.random(0.4f, 2f);
     }
 }

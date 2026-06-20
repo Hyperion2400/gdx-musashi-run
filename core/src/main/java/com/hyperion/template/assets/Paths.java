@@ -15,5 +15,6 @@ public class Paths {
     public static final String MENU_MUSIC = "music/Universfield - Retro Energy.ogg";
 
     public static final String BUTTON_CLICK = "sound/Universfield - Button Click.ogg";
+    public static final String SWORD_SLASH = "sound/sword_slash.ogg";
 
 }
