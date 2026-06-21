@@ -42,7 +42,7 @@ public class PlayScreen implements GameScreen {
     private final SpawnSystem spawnSystem = new SpawnSystem(worldStage);
 
     private final Warrior player = new Warrior(
-        Warrior.MARTIAL_HERO_1, 88, PLAYER_OFFSET_X, START_SPEED, 1, GROUND_Y, 1, 60, 4);
+        Warrior.MARTIAL_HERO_1, 88, PLAYER_OFFSET_X, START_SPEED, 1, GROUND_Y, 1, 75, 4);
 
     private final Warrior[] enemies = new Warrior[6];
 
@@ -69,7 +69,7 @@ public class PlayScreen implements GameScreen {
         for (int i = 0; i < enemies.length; i++) {
             // initialize pool of reusable enemy warriors to reduce object creations
             enemies[i] = new Warrior(
-                Warrior.MARTIAL_HERO_2, 85, 0, START_SPEED, -1, GROUND_Y, 1, 50, 2);
+                Warrior.MARTIAL_HERO_2, 85, 0, START_SPEED, -1, GROUND_Y, 1, 65, 2);
         }
     }
 
@@ -145,8 +145,8 @@ public class PlayScreen implements GameScreen {
 
         float viewPortLeft = viewPortLeft();
 
-        // move background with half of player speed for parallax effect
-        background.moveBy(player.getSpeedX() / 2 * delta, 0);
+        // move background in relation to ground for parallax effect
+        background.moveBy(player.getSpeedX() / 4 * delta, 0);
 
         background.rearrange(viewPortLeft);
         ground.rearrange(viewPortLeft);
@@ -166,13 +166,12 @@ public class PlayScreen implements GameScreen {
     private void updateDifficulty() {
         if (score < 100) {
             player.setSpeedX(START_SPEED); // start speed
-        } else if (score > 100 && score < 400) {
+        } else if (score > 100 && score < 800) {
             float progressionFactor = score / 100 * 0.1f; // add 1% speed every 100 points
             player.setSpeedX(START_SPEED * (1 + progressionFactor));
-        } else if (score >= 400) {
-            // terminal speed. going beyond 1.4 makes me dizzy.
-            // rather use max number of allowed short spawn intervals in a row to increase difficulty
-            player.setSpeedX(START_SPEED * 1.4f);
+        } else if (score >= 800) {
+            // terminal speed
+            player.setSpeedX(START_SPEED * 1.8f);
         }
     }
 

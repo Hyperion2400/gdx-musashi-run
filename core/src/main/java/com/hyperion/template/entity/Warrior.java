@@ -35,7 +35,8 @@ public class Warrior extends Actor {
     private final int direction; // 1 if right, -1 if left
     private final int hitFrame; // the frame of the animation that represents the hit
 
-    private final Rectangle attackBox = new Rectangle();
+    private final Rectangle attackBox;
+    private final Rectangle startAttackBox;
 
     private float maxSpeedX;
     private float speedX;
@@ -70,6 +71,8 @@ public class Warrior extends Actor {
         this.hitFrame = hitFrame;
 
         setSize(30, 48);
+        attackBox = new Rectangle(0, 0, attackRange, getHeight());
+        startAttackBox = new Rectangle(0, 0, attackRange, getHeight());
 
         TextureAtlas atlas = MyAssetManager.getTextureAtlas(Paths.SPRITE_SHEET);
 
@@ -118,6 +121,25 @@ public class Warrior extends Actor {
         if (isAttacking && animationTime > attackAnimation.getAnimationDuration()) {
             isAttacking = false;
         }
+
+        updateAttackBoxes(delta);
+    }
+
+    private void updateAttackBoxes(float delta) {
+
+        float x = getX() + (getRight() - getX()) / 2;
+        int speedOffset = (int) (25 * speedX * delta); // anticipate movement
+
+        attackBox.x = startAttackBox.x = x;
+
+        if (direction == 1) {
+            startAttackBox.x += speedOffset;
+        } else {
+            attackBox.x -= attackRange;
+            startAttackBox.x -= attackRange + speedOffset;
+        }
+
+        attackBox.y = startAttackBox.y = getY();
     }
 
     @Override
@@ -147,16 +169,14 @@ public class Warrior extends Actor {
     public void drawDebug(ShapeRenderer shapes) {
         super.drawDebug(shapes);
         shapes.setColor(Color.RED);
-        drawAttackBox(shapes);
+        //shapes.rect(attackBox.x, attackBox.y, attackBox.width, attackBox.height);
         shapes.setColor(Color.GREEN);
-    }
-
-    private void drawAttackBox(ShapeRenderer shapes) {
-        if (direction == 1) {
-            shapes.rect(getRight(), getY(), attackRange, getHeight());
-        } else {
-            shapes.rect(getX(), getY(), -attackRange, getHeight());
-        }
+        shapes.rect(
+            startAttackBox.x,
+            startAttackBox.y,
+            startAttackBox.width,
+            startAttackBox.height
+        );
     }
 
     public void jump(float delta) {
@@ -237,37 +257,14 @@ public class Warrior extends Actor {
      * The bounds in which a target is considered to be hit if an attack occurs.
      */
     public Rectangle getAttackBox() {
-        if (direction == 1) {
-            attackBox.x = getRight();
-        } else {
-            attackBox.x = getX() - attackRange;
-        }
-
-        attackBox.y = getY();
-        attackBox.width = attackRange;
-        attackBox.height = getHeight();
-
         return attackBox;
     }
 
     /**
      * The bounds in which an attack should be started to hit a moving target.
      */
-    public Rectangle getStartAttackBox(float delta) {
-
-        int speedOffset = (int) (30 * speedX * delta); // anticipate movement
-
-        if (direction == 1) {
-            attackBox.x = getRight() + speedOffset;
-        } else {
-            attackBox.x = getX() - attackRange - speedOffset;
-        }
-
-        attackBox.y = getY();
-        attackBox.width = attackRange;
-        attackBox.height = getHeight();
-
-        return attackBox;
+    public Rectangle getStartAttackBox() {
+        return startAttackBox;
     }
 
     public boolean isHitFrame() {

@@ -1,7 +1,7 @@
 # Musashi Run - A LibGDX Game Template
 
 A polished [libGDX](https://libgdx.com/) game template with menus, screen transitions, music and sounds to bootstrap
-your project. The gameplay sucks, but that's just a placeholder anyway.
+your project. The gameplay is meh, but that's just a placeholder anyway.
 
 The template is meant for beginners and game jam participants, since serious projects will probably target more
 platforms than the ones provided here and will need to change the setup.

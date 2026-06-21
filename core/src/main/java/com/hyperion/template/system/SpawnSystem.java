@@ -10,9 +10,9 @@ import java.util.Deque;
 public class SpawnSystem {
 
     private enum Interval {
-        SHORT(0.6f),
-        MEDIUM(1.1f),
-        LONG(1.8f);
+        SHORT(0.5f),
+        MEDIUM(1f),
+        LONG(1.5f);
 
         public final float time;
 
@@ -43,7 +43,7 @@ public class SpawnSystem {
         timeTillNextEnemy -= delta;
 
         if (timeTillNextEnemy < 0) {
-            maxShortIntervalsInARow = 2 + score / 500; // allow more short intervals in a row each 500 points
+            maxShortIntervalsInARow = Math.min(2 + score / 500, 8); // allow more short intervals in a row each 500 points
             spawnEnemy(enemies, viewPortRight);
         }
 

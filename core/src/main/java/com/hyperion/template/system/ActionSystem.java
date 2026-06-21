@@ -22,12 +22,13 @@ public class ActionSystem {
             }
 
             if (!enemy.isAttacking()
-                && enemy.getStartAttackBox(delta).overlaps(player.getBounds())) {
+                && enemy.getStartAttackBox().overlaps(player.getBounds())) {
                 enemy.attack();
             }
 
-            if (enemy.isHitFrame() && !enemy.isDamagedDealt() && enemy.getAttackBox()
-                .overlaps(player.getBounds())) {
+            if (enemy.isHitFrame()
+                && !enemy.isDamagedDealt()
+                && enemy.getAttackBox().overlaps(player.getBounds())) {
                 player.takeHit();
                 enemy.dealDamage();
             }
