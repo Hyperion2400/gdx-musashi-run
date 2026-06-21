@@ -5,27 +5,28 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Preferences;
 import com.hyperion.template.MyGdxGame;
 
-public class SettingsManager {
+public class PreferencesManager {
 
     public static final String PATH = MyGdxGame.TITLE + "/settings";
 
     public static final String FULLSCREEN = "fullscreen";
+    public static final String HIGH_SCORE = "high_score";
     public static final String MUSIC = "music";
     public static final String SOUND = "sound";
 
     private static boolean musicEnabled;
     private static boolean soundEnabled;
 
-    private SettingsManager() {
+    private PreferencesManager() {
     }
 
     public static void create() {
 
-        Preferences prefs = Gdx.app.getPreferences(SettingsManager.PATH);
+        Preferences prefs = Gdx.app.getPreferences(PreferencesManager.PATH);
 
-        setFullScreen(prefs.getBoolean(SettingsManager.FULLSCREEN, false));
-        setMusicEnabled(prefs.getBoolean(SettingsManager.MUSIC, true));
-        setSoundEnabled(prefs.getBoolean(SettingsManager.SOUND, true));
+        setFullScreen(prefs.getBoolean(PreferencesManager.FULLSCREEN, false));
+        setMusicEnabled(prefs.getBoolean(PreferencesManager.MUSIC, true));
+        setSoundEnabled(prefs.getBoolean(PreferencesManager.SOUND, true));
     }
 
     public static void setFullScreen(boolean fullScreen) {
@@ -43,17 +44,28 @@ public class SettingsManager {
         }
     }
 
+    public static int getHighScore() {
+        Preferences prefs = Gdx.app.getPreferences(PATH);
+        return prefs.getInteger(HIGH_SCORE);
+    }
+
+    public static void setHighScore(int highScore) {
+        Preferences prefs = Gdx.app.getPreferences(PATH);
+        prefs.putInteger(HIGH_SCORE, highScore);
+        prefs.flush();
+    }
+
     public static boolean isMusicEnabled() {
         return musicEnabled;
     }
 
     public static void setMusicEnabled(boolean musicEnabled) {
-        SettingsManager.musicEnabled = musicEnabled;
+        PreferencesManager.musicEnabled = musicEnabled;
         putBoolean(MUSIC, musicEnabled);
     }
 
     public static void setSoundEnabled(boolean soundEnabled) {
-        SettingsManager.soundEnabled = soundEnabled;
+        PreferencesManager.soundEnabled = soundEnabled;
         putBoolean(SOUND, soundEnabled);
     }
 

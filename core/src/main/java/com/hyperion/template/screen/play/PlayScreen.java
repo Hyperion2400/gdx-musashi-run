@@ -1,6 +1,7 @@
 package com.hyperion.template.screen.play;
 
 import com.badlogic.gdx.graphics.Camera;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -13,6 +14,7 @@ import com.hyperion.template.entity.Warrior;
 import com.hyperion.template.screen.GameScreen;
 import com.hyperion.template.screen.ScreenManager;
 import com.hyperion.template.screen.menu.MainMenuScreen;
+import com.hyperion.template.settings.PreferencesManager;
 import com.hyperion.template.system.ActionSystem;
 import com.hyperion.template.system.SpawnSystem;
 import com.hyperion.template.ui.FontSize;
@@ -50,7 +52,8 @@ public class PlayScreen implements GameScreen {
     private final InfiniteBackground ground =
         new InfiniteBackground(Paths.WORLD_MAP, 0, WORLD_WIDTH);
 
-    private long score;
+    private int score;
+    private final int highScore = PreferencesManager.getHighScore();
     private long deathTimestamp = 0; // used to measure time before going back to main menu after death
 
     public PlayScreen() {
@@ -108,6 +111,9 @@ public class PlayScreen implements GameScreen {
 
             if (player.isDead()) {
                 deathTimestamp = TimeUtils.millis();
+                if (score > highScore) {
+                    PreferencesManager.setHighScore(score);
+                }
             }
         } else {
             if (TimeUtils.millis() - deathTimestamp > 3000) {
@@ -132,13 +138,16 @@ public class PlayScreen implements GameScreen {
         background.rearrange(viewPortLeft);
         ground.rearrange(viewPortLeft);
 
-        spawnSystem.update(delta, enemies, viewPortLeft, viewPortRight());
+        spawnSystem.update(delta, enemies, viewPortLeft, viewPortRight(), score);
         updateCamera(viewPortLeft);
     }
 
     private void updateScore() {
-        score = (long) (player.getX() - PLAYER_OFFSET_X) / 10; // just based on player position
+        score = (int) (player.getX() - PLAYER_OFFSET_X) / 10; // just based on player position
         scoreLabel.setText(String.valueOf(score));
+        if (score > highScore) {
+            scoreLabel.setColor(Color.GOLD); // change color to signify new high score
+        }
     }
 
     private void updateDifficulty() {

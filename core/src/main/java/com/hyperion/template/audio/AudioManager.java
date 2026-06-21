@@ -3,7 +3,7 @@ package com.hyperion.template.audio;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
 import com.hyperion.template.assets.MyAssetManager;
-import com.hyperion.template.settings.SettingsManager;
+import com.hyperion.template.settings.PreferencesManager;
 
 public class AudioManager {
 
@@ -16,7 +16,7 @@ public class AudioManager {
     }
 
     public static void playMusic(String musicPath) {
-        if (!SettingsManager.isMusicEnabled()) {
+        if (!PreferencesManager.isMusicEnabled()) {
             return;
         }
 
@@ -55,7 +55,7 @@ public class AudioManager {
     }
 
     public static void playSound(String soundPath) {
-        if (SettingsManager.isSoundEnabled()) {
+        if (PreferencesManager.isSoundEnabled()) {
             Sound sound = MyAssetManager.getSound(soundPath);
             sound.play();
         }

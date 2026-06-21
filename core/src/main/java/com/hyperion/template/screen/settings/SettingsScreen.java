@@ -15,7 +15,7 @@ import com.hyperion.template.audio.AudioManager;
 import com.hyperion.template.screen.GameScreen;
 import com.hyperion.template.screen.ScreenManager;
 import com.hyperion.template.screen.menu.MainMenuScreen;
-import com.hyperion.template.settings.SettingsManager;
+import com.hyperion.template.settings.PreferencesManager;
 import com.hyperion.template.ui.FontSize;
 import com.hyperion.template.ui.UiFactory;
 
@@ -54,7 +54,7 @@ public class SettingsScreen implements GameScreen {
         fullscreenCheckBox.padBottom(20);
 
         musicCheckBox = UiFactory.checkBox(
-                SettingsManager.isMusicEnabled(),
+                PreferencesManager.isMusicEnabled(),
                 FontSize.MEDIUM,
                 this::changeMusicSetting
         );
@@ -62,7 +62,7 @@ public class SettingsScreen implements GameScreen {
         musicCheckBox.padBottom(20);
 
         soundCheckBox = UiFactory.checkBox(
-                SettingsManager.isSoundEnabled(),
+                PreferencesManager.isSoundEnabled(),
                 FontSize.MEDIUM,
                 this::changeSoundSetting
         );
@@ -120,12 +120,12 @@ public class SettingsScreen implements GameScreen {
     }
 
     private void changeFullscreenSetting() {
-        SettingsManager.setFullScreen(fullscreenCheckBox.isChecked());
+        PreferencesManager.setFullScreen(fullscreenCheckBox.isChecked());
     }
 
     private void changeMusicSetting() {
         boolean isMusic = musicCheckBox.isChecked();
-        SettingsManager.setMusicEnabled(isMusic);
+        PreferencesManager.setMusicEnabled(isMusic);
         if (!isMusic) {
             AudioManager.stopMusic();
         } else {
@@ -134,7 +134,7 @@ public class SettingsScreen implements GameScreen {
     }
 
     private void changeSoundSetting() {
-        SettingsManager.setSoundEnabled(soundCheckBox.isChecked());
+        PreferencesManager.setSoundEnabled(soundCheckBox.isChecked());
     }
 
     @Override
