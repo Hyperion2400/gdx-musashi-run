@@ -55,6 +55,7 @@ public class PlayScreen implements GameScreen {
     private int score;
     private final int highScore = PreferencesManager.getHighScore();
     private long deathTimestamp = 0; // used to measure time before going back to main menu after death
+    private final int outroDuration = 3000;
 
     public PlayScreen() {
         worldStage.addActor(background);
@@ -110,21 +111,33 @@ public class PlayScreen implements GameScreen {
             actionSystem.update(delta, player, enemies);
 
             if (player.isDead()) {
-                deathTimestamp = TimeUtils.millis();
-                if (score > highScore) {
-                    PreferencesManager.setHighScore(score);
-                }
+                endGame();
             }
         } else {
-            if (TimeUtils.millis() - deathTimestamp > 3000) {
-                ScreenManager.pushScreen(new MainMenuScreen());
-            }
+            updateOutro();
         }
 
         updatePositions(delta);
 
         worldStage.draw();
         uiStage.draw();
+    }
+
+    private void endGame() {
+        deathTimestamp = TimeUtils.millis();
+        if (score > highScore) {
+            PreferencesManager.setHighScore(score);
+        }
+        AudioManager.playSound(Paths.GAME_OVER);
+    }
+
+    private void updateOutro() {
+        float outroProgression = 1f * (TimeUtils.millis() - deathTimestamp) / outroDuration;
+        // turn screen red after death because it looks cool
+        worldStage.getBatch().setColor(1f, 1f - outroProgression, 1f - outroProgression, 1f);
+        if (outroProgression > 1) {
+            ScreenManager.pushScreen(new MainMenuScreen());
+        }
     }
 
     private void updatePositions(float delta) {
@@ -156,10 +169,10 @@ public class PlayScreen implements GameScreen {
         } else if (score > 100 && score < 400) {
             float progressionFactor = score / 100 * 0.1f; // add 1% speed every 100 points
             player.setSpeedX(START_SPEED * (1 + progressionFactor));
-        } else if (score > 500) {
-            // terminal speed. going beyond 1.5 makes me dizzy.
+        } else if (score >= 400) {
+            // terminal speed. going beyond 1.4 makes me dizzy.
             // rather use max number of allowed short spawn intervals in a row to increase difficulty
-            player.setSpeedX(START_SPEED * 1.5f);
+            player.setSpeedX(START_SPEED * 1.4f);
         }
     }
 

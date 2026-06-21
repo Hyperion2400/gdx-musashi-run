@@ -14,3 +14,5 @@ check the according licenses yourself.
 - Sounds
     - Button Click: https://pixabay.com/sound-effects/film-special-effects-click-button-app-147358/
     - Sword Slash: https://pixabay.com/sound-effects/sword-slash-476148/
+    - Game Over: https://pixabay.com/de/sound-effects/film-spezialeffekte-shaped-taiko-180916/
+

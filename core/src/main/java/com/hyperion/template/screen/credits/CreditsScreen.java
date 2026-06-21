@@ -55,7 +55,7 @@ public class CreditsScreen implements GameScreen {
                 LuizMelo
                 Patrick Wagesreiter
                 Universfield
-                Universfield""",
+                Universfield, SoundReality""",
             FontSize.SMALL
         );
 
