@@ -4,12 +4,29 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.hyperion.template.entity.Warrior;
 
+import java.util.ArrayDeque;
+import java.util.Deque;
+
 public class SpawnSystem {
+
+    private enum Interval {
+        SHORT(0.6f),
+        MEDIUM(1.1f),
+        LONG(1.8f);
+
+        public final float time;
+
+        Interval(float time) {
+            this.time = time;
+        }
+    }
 
     private final Stage stage;
 
-    private float timeTillNextEnemy = 1.2f;
     private int nextEnemyIndex = 0;
+    private int maxShortIntervalsInARow = 2;
+    private float timeTillNextEnemy = Interval.LONG.time;
+    private final Deque<Interval> lastIntervals = new ArrayDeque<>();
 
     public SpawnSystem(Stage stage) {
         this.stage = stage;
@@ -19,12 +36,14 @@ public class SpawnSystem {
         float delta,
         Warrior[] enemies,
         float viewPortLeft,
-        float viewPortRight
+        float viewPortRight,
+        int score
     ) {
 
         timeTillNextEnemy -= delta;
 
         if (timeTillNextEnemy < 0) {
+            maxShortIntervalsInARow = 2 + score / 500; // allow more short intervals in a row each 500 points
             spawnEnemy(enemies, viewPortRight);
         }
 
@@ -60,6 +79,27 @@ public class SpawnSystem {
     }
 
     private void resetTimeTillNextEnemy() {
-        timeTillNextEnemy = MathUtils.random(0.4f, 2f);
+        Interval nextInterval = nextInterval();
+        lastIntervals.push(nextInterval);
+        if (lastIntervals.size() > maxShortIntervalsInARow) {
+            lastIntervals.removeLast();
+        }
+
+        timeTillNextEnemy = nextInterval.time;
+    }
+
+    private Interval nextInterval() {
+        // make sure we don't get the same interval too many times in a row
+        if (lastIntervalsMatch(Interval.SHORT, maxShortIntervalsInARow - 1)) {
+            return new Interval[]{Interval.MEDIUM, Interval.LONG}[MathUtils.random(0, 1)];
+        } else if (lastIntervalsMatch(Interval.LONG, 3)) {
+            return new Interval[]{Interval.SHORT, Interval.MEDIUM}[MathUtils.random(0, 1)];
+        } else {
+            return Interval.values()[MathUtils.random(0, Interval.values().length - 1)];
+        }
+    }
+
+    private boolean lastIntervalsMatch(Interval interval, int limit) {
+        return lastIntervals.stream().limit(limit).allMatch(i -> i == Interval.SHORT);
     }
 }
