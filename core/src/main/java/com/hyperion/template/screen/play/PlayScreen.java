@@ -145,10 +145,12 @@ public class PlayScreen implements GameScreen {
         if (score < 100) {
             player.setSpeedX(START_SPEED); // start speed
         } else if (score > 100 && score < 400) {
-            float progressionFactor = score / 100 * 0.25f; // add 25% speed every 100 points
+            float progressionFactor = score / 100 * 0.1f; // add 1% speed every 100 points
             player.setSpeedX(START_SPEED * (1 + progressionFactor));
-        } else if (score > 400) {
-            player.setSpeedX(START_SPEED * 2f); // terminal speed
+        } else if (score > 500) {
+            // terminal speed. going beyond 1.5 makes me dizzy.
+            // rather use max number of allowed short spawn intervals in a row to increase difficulty
+            player.setSpeedX(START_SPEED * 1.5f);
         }
     }
 
