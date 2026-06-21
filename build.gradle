@@ -59,7 +59,7 @@ configure(subprojects) {
 
 subprojects {
   version = "$projectVersion"
-  ext.appName = 'GdxGameTemplate'
+  ext.appName = 'gdx-musashi-run'
   repositories {
     mavenCentral()
     // You may want to remove the following line if you have errors downloading dependencies.
@@ -70,4 +70,4 @@ subprojects {
   }
 }
 
-eclipse.project.name = 'GdxGameTemplate' + '-parent'
+eclipse.project.name = 'gdx-musashi-run' + '-parent'
