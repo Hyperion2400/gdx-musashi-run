@@ -27,6 +27,10 @@ public interface GameScreen extends Screen {
     default void hide() {
     }
 
+    /**
+     * @return The path of the music resource that is supposed to be played in this screen.
+     * If null, then the current music is continued to be played
+     */
     default String getMusicPath() {
         return null;
     }

@@ -23,8 +23,6 @@ public class MyAssetManager {
 
         loadTextures();
 
-        assetManager.load(Paths.SPRITE_SHEET, TextureAtlas.class);
-
         loadFont();
 
         loadAudio();
@@ -38,13 +36,16 @@ public class MyAssetManager {
         assetManager.load(Paths.WORLD_BACKGROUND, Texture.class);
         assetManager.load(Paths.WORLD_MAP, Texture.class);
 
-        // use TextureFilter.Linear to reduce scaling artifacts but not for pixel art
+        // TextureFilter.Linear on the checkboxes to reduce scaling artifacts.
+        // don't use this for the pixel art, otherwise it won't be pixel perfect.
         var parameter = new TextureLoader.TextureParameter();
         parameter.minFilter = Texture.TextureFilter.Linear;
         parameter.magFilter = Texture.TextureFilter.Linear;
 
         assetManager.load(Paths.CHECKBOX_OFF, Texture.class, parameter);
         assetManager.load(Paths.CHECKBOX_ON, Texture.class, parameter);
+
+        assetManager.load(Paths.SPRITE_SHEET, TextureAtlas.class);
     }
 
     private static void loadFont() {

@@ -28,28 +28,16 @@ public class MainMenuScreen implements GameScreen {
     public MainMenuScreen() {
 
         TextButton startButton = UiFactory.textButton(
-            "Start",
-            FontSize.LARGE,
-            () -> ScreenManager.pushScreen(new PlayScreen())
-        );
+            "Start", FontSize.LARGE, () -> ScreenManager.pushScreen(new PlayScreen()));
 
         TextButton settingsButton = UiFactory.textButton(
-            "Settings",
-            FontSize.MEDIUM,
-            () -> ScreenManager.pushScreen(new SettingsScreen())
-        );
+            "Settings", FontSize.MEDIUM, () -> ScreenManager.pushScreen(new SettingsScreen()));
 
         TextButton creditsButton = UiFactory.textButton(
-            "Credits",
-            FontSize.MEDIUM,
-            () -> ScreenManager.pushScreen(new CreditsScreen())
-        );
+            "Credits", FontSize.MEDIUM, () -> ScreenManager.pushScreen(new CreditsScreen()));
 
         TextButton quitButton = UiFactory.textButton(
-            "Quit",
-            FontSize.MEDIUM,
-            () -> Gdx.app.exit()
-        );
+            "Quit", FontSize.MEDIUM, () -> Gdx.app.exit());
 
         Table table = new Table();
         table.setFillParent(true);
@@ -71,10 +59,7 @@ public class MainMenuScreen implements GameScreen {
         Image menuBackgroundImg = UiFactory.menuBackground();
 
         stage = new Stage(new FitViewport(
-            MyGdxGame.WIDTH,
-            MyGdxGame.HEIGHT,
-            new OrthographicCamera()
-        ));
+            MyGdxGame.WIDTH, MyGdxGame.HEIGHT, new OrthographicCamera()));
         stage.addActor(menuBackgroundImg);
         stage.addActor(table);
         stage.addActor(versionLabel());

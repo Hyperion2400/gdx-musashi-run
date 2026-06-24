@@ -2,7 +2,7 @@ package com.hyperion.template.system;
 
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.hyperion.template.entity.Warrior;
+import com.hyperion.template.world.Warrior;
 
 import java.util.ArrayDeque;
 import java.util.Deque;

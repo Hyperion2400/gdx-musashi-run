@@ -27,10 +27,7 @@ public class CreditsScreen implements GameScreen {
         Table table = creditsTable();
 
         stage = new Stage(new FitViewport(
-            MyGdxGame.WIDTH,
-            MyGdxGame.HEIGHT,
-            new OrthographicCamera()
-        ));
+            MyGdxGame.WIDTH, MyGdxGame.HEIGHT, new OrthographicCamera()));
 
         stage.addActor(menuBackgroundImg);
         stage.addActor(table);
@@ -60,10 +57,7 @@ public class CreditsScreen implements GameScreen {
         );
 
         TextButton backButton = UiFactory.textButton(
-            "Back",
-            FontSize.LARGE,
-            () -> ScreenManager.pushScreen(new MainMenuScreen())
-        );
+            "Back", FontSize.LARGE, () -> ScreenManager.pushScreen(new MainMenuScreen()));
 
         Table table = UiFactory.fullSizeTable();
 

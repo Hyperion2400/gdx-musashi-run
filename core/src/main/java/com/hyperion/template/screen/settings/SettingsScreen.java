@@ -35,10 +35,7 @@ public class SettingsScreen implements GameScreen {
         Table table = settingsTable();
 
         stage = new Stage(new FitViewport(
-                MyGdxGame.WIDTH,
-                MyGdxGame.HEIGHT,
-                new OrthographicCamera()
-        ));
+            MyGdxGame.WIDTH, MyGdxGame.HEIGHT, new OrthographicCamera()));
         stage.addActor(menuBackgroundImg);
         stage.addActor(table);
     }
@@ -46,34 +43,22 @@ public class SettingsScreen implements GameScreen {
     private Table settingsTable() {
 
         fullscreenCheckBox = UiFactory.checkBox(
-                Gdx.graphics.isFullscreen(),
-                FontSize.MEDIUM,
-                this::changeFullscreenSetting
-        );
+            Gdx.graphics.isFullscreen(), FontSize.MEDIUM, this::changeFullscreenSetting);
         fullscreenCheckBox.padLeft(20);
         fullscreenCheckBox.padBottom(20);
 
         musicCheckBox = UiFactory.checkBox(
-                PreferencesManager.isMusicEnabled(),
-                FontSize.MEDIUM,
-                this::changeMusicSetting
-        );
+            PreferencesManager.isMusicEnabled(), FontSize.MEDIUM, this::changeMusicSetting);
         musicCheckBox.padLeft(20);
         musicCheckBox.padBottom(20);
 
         soundCheckBox = UiFactory.checkBox(
-                PreferencesManager.isSoundEnabled(),
-                FontSize.MEDIUM,
-                this::changeSoundSetting
-        );
+            PreferencesManager.isSoundEnabled(), FontSize.MEDIUM, this::changeSoundSetting);
         soundCheckBox.padLeft(20);
         soundCheckBox.padBottom(20);
 
         TextButton backButton = UiFactory.textButton(
-                "Back",
-                FontSize.LARGE,
-                () -> ScreenManager.pushScreen(new MainMenuScreen())
-        );
+            "Back", FontSize.LARGE, () -> ScreenManager.pushScreen(new MainMenuScreen()));
 
         Table table = UiFactory.fullSizeTable();
 

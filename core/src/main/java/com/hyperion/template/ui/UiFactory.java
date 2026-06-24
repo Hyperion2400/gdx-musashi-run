@@ -65,7 +65,6 @@ public class UiFactory {
     public static TextButton textButton(String text, FontSize fontSize, Runnable runnable) {
         TextButton button = new JuicyTextButton(text, buttonStyle, fontSize.scale);
         button.getLabel().setAlignment(Align.left);
-        //button.pad(20);
         button.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {

@@ -1,4 +1,4 @@
-package com.hyperion.template.entity;
+package com.hyperion.template.world;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Animation;
@@ -12,6 +12,9 @@ import com.hyperion.template.assets.MyAssetManager;
 import com.hyperion.template.assets.Paths;
 import com.hyperion.template.audio.AudioManager;
 
+/***
+ * Represent both the player and enemies.
+ */
 public class Warrior extends Actor {
 
     public static final String MARTIAL_HERO_1 = "martial_hero_1";
@@ -148,20 +151,21 @@ public class Warrior extends Actor {
         // if speed is negative (running left) use negative width to flip texture
         float posX = (direction == 1 ? getX() : getX() + REGION_WIDTH) - offsetX;
 
-        TextureRegion region;
+        Animation<TextureRegion> animation;
 
         if (isDead) {
-            region = deathAnimation.getKeyFrame(animationTime);
+            animation = deathAnimation;
         } else if (isAttacking) {
-            region = attackAnimation.getKeyFrame(animationTime);
+            animation = attackAnimation;
         } else if (getY() == groundY) {
-            region = runAnimation.getKeyFrame(animationTime);
+            animation = runAnimation;
         } else if (speedY > 0) {
-            region = jumpAnimation.getKeyFrame(animationTime);
+            animation = jumpAnimation;
         } else {
-            region = fallAnimation.getKeyFrame(animationTime);
+            animation = fallAnimation;
         }
 
+        var region = animation.getKeyFrame(animationTime);
         batch.draw(region, posX, getY(), direction * REGION_WIDTH, region.getRegionHeight());
     }
 
@@ -169,14 +173,9 @@ public class Warrior extends Actor {
     public void drawDebug(ShapeRenderer shapes) {
         super.drawDebug(shapes);
         shapes.setColor(Color.RED);
-        //shapes.rect(attackBox.x, attackBox.y, attackBox.width, attackBox.height);
         shapes.setColor(Color.GREEN);
         shapes.rect(
-            startAttackBox.x,
-            startAttackBox.y,
-            startAttackBox.width,
-            startAttackBox.height
-        );
+            startAttackBox.x, startAttackBox.y, startAttackBox.width, startAttackBox.height);
     }
 
     public void jump(float delta) {

@@ -1,7 +1,7 @@
 package com.hyperion.template.system;
 
 import com.badlogic.gdx.Gdx;
-import com.hyperion.template.entity.Warrior;
+import com.hyperion.template.world.Warrior;
 
 public class ActionSystem {
 

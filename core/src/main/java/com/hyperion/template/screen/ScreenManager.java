@@ -94,7 +94,7 @@ public class ScreenManager {
 
 
             if (overlayOpacity < 1) {
-                // if next screen has a music path and it differs from current, fade out music as well
+                // if next screen has a music path, and it differs from current, fade out music as well
                 if (nextScreen.getMusicPath() != null
                     && !nextScreen.getMusicPath().equals(AudioManager.getCurrentMusicPath())) {
                     AudioManager.setVolume(1 - overlayOpacity);

@@ -1,7 +1,6 @@
 package com.hyperion.template.screen.play;
 
 import com.badlogic.gdx.graphics.Camera;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -10,16 +9,17 @@ import com.badlogic.gdx.utils.TimeUtils;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.hyperion.template.assets.Paths;
 import com.hyperion.template.audio.AudioManager;
-import com.hyperion.template.entity.Warrior;
 import com.hyperion.template.screen.GameScreen;
 import com.hyperion.template.screen.ScreenManager;
 import com.hyperion.template.screen.menu.MainMenuScreen;
-import com.hyperion.template.settings.PreferencesManager;
 import com.hyperion.template.system.ActionSystem;
+import com.hyperion.template.system.DifficultySystem;
+import com.hyperion.template.system.ScoreSystem;
 import com.hyperion.template.system.SpawnSystem;
 import com.hyperion.template.ui.FontSize;
 import com.hyperion.template.ui.UiFactory;
 import com.hyperion.template.world.InfiniteBackground;
+import com.hyperion.template.world.Warrior;
 
 public class PlayScreen implements GameScreen {
 
@@ -39,6 +39,8 @@ public class PlayScreen implements GameScreen {
         new Stage(new FitViewport(WORLD_WIDTH, WORLD_HEIGHT, new OrthographicCamera()));
 
     private final ActionSystem actionSystem = new ActionSystem();
+    private final DifficultySystem difficultySystem = new DifficultySystem(START_SPEED);
+    private final ScoreSystem scoreSystem = new ScoreSystem(PLAYER_OFFSET_X, scoreLabel);
     private final SpawnSystem spawnSystem = new SpawnSystem(worldStage);
 
     private final Warrior player = new Warrior(
@@ -52,8 +54,6 @@ public class PlayScreen implements GameScreen {
     private final InfiniteBackground ground =
         new InfiniteBackground(Paths.WORLD_MAP, 0, WORLD_WIDTH);
 
-    private int score;
-    private final int highScore = PreferencesManager.getHighScore();
     private long deathTimestamp = 0; // used to measure time before going back to main menu after death
     private final int outroDuration = 3000;
 
@@ -88,9 +88,7 @@ public class PlayScreen implements GameScreen {
 
     private Label hintLabel2() {
         Label label = UiFactory.label(
-            "You can touch enemies, but avoid their blades.",
-            FontSize.SMALL
-        );
+            "You jump on top of enemies, but avoid their blades.", FontSize.SMALL);
         label.setPosition(3 * WORLD_WIDTH, 32);
         label.getColor().a = 0.8f;
         return label;
@@ -105,8 +103,8 @@ public class PlayScreen implements GameScreen {
 
         if (!player.isDead()) {
 
-            updateScore();
-            updateDifficulty();
+            scoreSystem.updateScore(player.getX());
+            player.setSpeedX(difficultySystem.calculateSpeed(scoreSystem.getScore()));
 
             actionSystem.update(delta, player, enemies);
 
@@ -125,9 +123,7 @@ public class PlayScreen implements GameScreen {
 
     private void endGame() {
         deathTimestamp = TimeUtils.millis();
-        if (score > highScore) {
-            PreferencesManager.setHighScore(score);
-        }
+        scoreSystem.updateHighScore();
         AudioManager.playSound(Paths.GAME_OVER);
     }
 
@@ -151,28 +147,8 @@ public class PlayScreen implements GameScreen {
         background.rearrange(viewPortLeft);
         ground.rearrange(viewPortLeft);
 
-        spawnSystem.update(delta, enemies, viewPortLeft, viewPortRight(), score);
+        spawnSystem.update(delta, enemies, viewPortLeft, viewPortRight(), scoreSystem.getScore());
         updateCamera(viewPortLeft);
-    }
-
-    private void updateScore() {
-        score = (int) (player.getX() - PLAYER_OFFSET_X) / 10; // just based on player position
-        scoreLabel.setText(String.valueOf(score));
-        if (score > highScore) {
-            scoreLabel.setColor(Color.GOLD); // change color to signify new high score
-        }
-    }
-
-    private void updateDifficulty() {
-        if (score < 100) {
-            player.setSpeedX(START_SPEED); // start speed
-        } else if (score > 100 && score < 800) {
-            float progressionFactor = score / 100 * 0.1f; // add 1% speed every 100 points
-            player.setSpeedX(START_SPEED * (1 + progressionFactor));
-        } else if (score >= 800) {
-            // terminal speed
-            player.setSpeedX(START_SPEED * 1.8f);
-        }
     }
 
     private float viewPortLeft() {
