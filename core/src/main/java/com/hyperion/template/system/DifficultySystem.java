@@ -11,12 +11,12 @@ public class DifficultySystem {
     public float calculateSpeed(int score) {
         if (score < 100) {
             return START_SPEED;
-        } else if (score > 100 && score < 800) {
-            float progressionFactor = score / 100 * 0.1f; // add 1% speed every 100 points
+        } else if (score < 1000) {
+            float progressionFactor = score / 250 * 0.25f; // add 25% base speed every 250 points
             return START_SPEED * (1 + progressionFactor);
         } else {
             // terminal speed
-            return START_SPEED * 1.8f;
+            return START_SPEED * 2;
         }
     }
 
