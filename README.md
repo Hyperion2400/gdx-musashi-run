@@ -6,10 +6,10 @@ your project. The gameplay is meh, but that's just a placeholder anyway.
 The template is meant for beginners and game jam participants, since serious projects will probably target more
 platforms than the ones provided here and will need to change the setup.
 
-This project was generated with [gdx-liftoff](https://github.com/libgdx/gdx-liftoff). I recommend doing your project
-setup with gdx-liftoff and only copying & pasting what you need out of the core module.
+This project was generated using [gdx-liftoff](https://github.com/libgdx/gdx-liftoff). I recommend doing your project
+setup with gdx-liftoff if you want to target other platforms than the ones provided here.
 
-[Play on itch.io](https://hyperion2400.itch.io/musashi-run)
+[### Play on itch.io ###](https://hyperion2400.itch.io/musashi-run)
 
 <img width="1280" height="720" alt="image" src="https://github.com/user-attachments/assets/b8183f1b-ee28-4b60-8d88-9b759badf83e" />
 
