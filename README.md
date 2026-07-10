@@ -9,9 +9,9 @@ platforms than the ones provided here and will need to change the setup.
 This project was generated with [gdx-liftoff](https://github.com/libgdx/gdx-liftoff). I recommend doing your project
 setup with gdx-liftoff and only copying & pasting what you need out of the core module.
 
-## Demo
+[Play on itch.io](https://hyperion2400.itch.io/musashi-run)
 
-[itch.io](https://hyperion2400.itch.io/musashi-run)
+<img width="1280" height="720" alt="image" src="https://github.com/user-attachments/assets/b8183f1b-ee28-4b60-8d88-9b759badf83e" />
 
 ## Platforms
 
