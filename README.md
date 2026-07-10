@@ -9,6 +9,10 @@ platforms than the ones provided here and will need to change the setup.
 This project was generated with [gdx-liftoff](https://github.com/libgdx/gdx-liftoff). I recommend doing your project
 setup with gdx-liftoff and only copying & pasting what you need out of the core module.
 
+## Demo
+
+[itch.io](https://hyperion2400.itch.io/musashi-run)
+
 ## Platforms
 
 - `core`: Main module with the application logic shared by all platforms.
