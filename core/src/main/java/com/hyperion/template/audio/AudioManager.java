@@ -7,7 +7,7 @@ import com.hyperion.template.settings.PreferencesManager;
 
 public class AudioManager {
 
-    private static final float MAX_MUSIC_VOLUME = 1f;
+    private static final float MAX_MUSIC_VOLUME = 0.8f;
 
     private static String currentMusicPath;
     private static Music music;
