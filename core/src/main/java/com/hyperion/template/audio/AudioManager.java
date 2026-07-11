@@ -7,7 +7,8 @@ import com.hyperion.template.settings.PreferencesManager;
 
 public class AudioManager {
 
-    private static final float MAX_MUSIC_VOLUME = 0.8f;
+    private static final float MAX_MUSIC_VOLUME = 0.7f;
+    private static final float SOUND_VOLUME = 0.9f;
 
     private static String currentMusicPath;
     private static Music music;
@@ -57,7 +58,7 @@ public class AudioManager {
     public static void playSound(String soundPath) {
         if (PreferencesManager.isSoundEnabled()) {
             Sound sound = MyAssetManager.getSound(soundPath);
-            sound.play();
+            sound.play(SOUND_VOLUME);
         }
     }
 }
