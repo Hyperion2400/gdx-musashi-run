@@ -88,7 +88,7 @@ public class PlayScreen implements GameScreen {
 
     private Label hintLabel2() {
         Label label = UiFactory.label(
-            "You jump on top of enemies, but avoid their blades.", FontSize.SMALL);
+            "You can jump on top of enemies, but avoid their blades.", FontSize.SMALL);
         label.setPosition(3 * WORLD_WIDTH, 32);
         label.getColor().a = 0.8f;
         return label;
